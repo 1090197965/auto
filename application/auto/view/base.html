@@ -1,0 +1,73 @@
+<!--{/*
+	此页面为后台表单添加的最顶级父类页面
+	使用了tp5的模版继承
+
+	title	: 为标题和页面名, 默认可以不设置, 可以在控制器中输出 $title 即可设置
+	body	: 为主体内容
+
+	head		: 为head中的样式和的位置(也可以放js, 如果需要的话)
+	foot		: 为body上, 主体内容下的位置, 主要放js(也可以放其他的东西)
+*/}-->
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<block name="title">
+		<title>
+			<present name="title">
+				{$title}
+				<else/>
+				配置页
+			</present>
+		</title>
+	</block>
+
+	<!--layui-->
+	<link rel="stylesheet" href="__PLUGIN__/layui/css/layui.css">
+	<!--基础-->
+
+	<include file='common@public/css/main' />
+	<block name="head"></block>
+
+</head>
+<body>
+	<block name="body">
+		此页面为后台表单添加的最顶级父类页面 <br>
+		使用了tp5的模版继承 <br>
+
+		title	: 为标题和页面名, 默认可以不设置, 可以在控制器中输出 $title 即可设置 <br>
+		body	: 为主体内容 <br>
+
+		head		: 为head中的样式和的位置(也可以放js, 如果需要的话) <br>
+		foot		: 为body上, 主体内容下的位置, 主要放js(也可以放其他的东西) <br>
+	</block>
+
+	<block name="jquery">
+		<script src="__JS__/jquery-3.1.1.min.js"></script>
+	</block>
+
+	<script src="__PLUGIN__/layui/layui.js"></script>
+	<include file='common@public/js/main' />
+	<script src="__JSMAIN__"></script>
+
+	<script>
+		//日期 QP:TODO 这里将设置日期初始化的方法放到base下
+		layui.use(['form', 'layedit', 'laydate'], function() {
+			var form = layui.form
+					,layer = layui.layer
+					,layedit = layui.layedit
+					,laydate = layui.laydate;
+
+			//日期
+			laydate.render({
+				elem: '.layui-date',
+				type: 'datetime'
+			});
+		});
+	</script>
+	<block name="foot">
+	</block>
+</body>
+</html>

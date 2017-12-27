@@ -1,0 +1,63 @@
+<foreach name="field" item="value" key="key">
+	<php>$type = $value->type;</php>
+	<php>$isSearch = $value->isSearch;</php>
+	<if condition="$isSearch">
+		<switch name="$type">
+			<case value=":$Item::ID">
+				<div class="layui-inline">
+					<label class="layui-form-label">{$value->title}</label>
+					<div class="layui-input-block">
+						<input type="text" name="{$value->name}" autocomplete="off" placeholder="{$value->remark}" class="layui-input">
+					</div>
+				</div>
+			</case>
+
+			<case value=":$Item::STRING">
+				<div class="layui-inline">
+					<label class="layui-form-label">{$value->title}</label>
+					<div class="layui-input-block">
+						<input type="text" name="{$value->name}" autocomplete="off" placeholder="{$value->remark}" class="layui-input">
+					</div>
+				</div>
+			</case>
+
+			<case value=":$Item::SW">
+				<div class="layui-inline">
+					<label class="layui-form-label">{$value->title}</label>
+					<div class="layui-input-block">
+						<include file='auto@format/select' item="value"/>
+					</div>
+				</div>
+			</case>
+
+			<case value=":$Item::INT">
+				<div class="layui-inline">
+					<label class="layui-form-label">{$value->title}</label>
+					<div class="layui-input-block">
+						<input type="text" name="{$value->name}" autocomplete="off" placeholder="{$value->remark}" class="layui-input">
+					</div>
+				</div>
+			</case>
+
+			<case value=":$Item::SELECT">
+				<div class="layui-inline">
+					<label class="layui-form-label">{$value->title}</label>
+					<div class="layui-input-inline">
+						<include file='auto@format/select' item="value"/>
+					</div>
+				</div>
+			</case>
+
+			<case value=":$Item::TIME">
+				<div class="layui-inline">
+					<label class="layui-form-label">{$value->title}</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input layui-data-range" name="{$value->name}" placeholder="开始 到 结束">
+					</div>
+				</div>
+			</case>
+
+			<default />
+		</switch>
+	</if>
+</foreach>

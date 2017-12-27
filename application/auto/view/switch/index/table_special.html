@@ -1,0 +1,24 @@
+<foreach name="indexShow" item="value" key="key">
+	<php>$value = $field[$value];</php>
+	<php>$type = $value->type;</php>
+
+	<script type="text/html" id="box-{$value->name}">
+		<switch name="$type">
+			<case value=":$Item::SW">
+				<!--开关单元格-->
+				<input type="checkbox" name="sex" value="{{d.{$value->name}}}" lay-skin="switch" lay-text="{:end($value->option)}|{:reset($value->option)}" lay-filter="sw" {{ d.{$value->name} == 1 ? 'checked' : '' }}>
+			</case>
+
+			<case value=":$Item::SELECT">
+				<!--选择框单元格-->
+				{{#var option = {:json_encode($value->option, JSON_UNESCAPED_UNICODE)};}}
+				{{option[d.{$value->name}]}}
+			</case>
+
+			<case value=":$Item::TIME">
+				<!--时间单元格-->
+				{{new Date(d.{$value->name}*1000).toLocaleString()}}
+			</case>
+		</switch>
+	</script>
+</foreach>

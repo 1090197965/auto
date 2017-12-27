@@ -1,0 +1,198 @@
+<extend name="auto@base"/>
+
+<block name="head">
+	<style>
+		.search-item .row > div > div{
+			height: 34px;
+			line-height: 34px;
+			margin-bottom: 0.5rem;
+		}
+		body {
+			padding: 1% 2%;
+		}
+		.hide {
+			display: none;
+		}
+	</style>
+</block>
+
+<block name="body">
+	<fieldset class="layui-elem-field layui-field-title" onclick="
+		$('#search-wrap').toggle();
+		$('.search-up').toggle();
+		$('.search-down').toggle();
+	">
+		<legend>
+			搜索栏
+			<i class="search-up layui-icon layui-anim layui-anim-up" style="display: none;"></i>
+			<i class="search-down layui-icon layui-anim layui-anim-up"></i>
+		</legend>
+	</fieldset>
+
+	<div class="layui-col-md12 layui-anim layui-anim-up hide" id="search-wrap">
+		<div class="ibox-content">
+			<div class="layui-form-item">
+				<form method="get" class="layui-form" id="search">
+					<!--搜索栏-->
+					<include file='auto@switch/index/search' />
+
+					<div class="form-group">
+						<hr>
+						<div class="layui-col-md4 layui-col-md-offset5">
+							<button class="layui-btn" lay-submit type="button" id="search-submit">
+								<i class="layui-icon"></i>
+								搜索
+							</button>
+							<button class="layui-btn layui-btn-danger" type="reset" onclick="$alert.messageB('重置成功')">
+								<i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop">ဂ</i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+
+				<!--用来ifarme传递信息用-->
+				<input type="hidden" id="layer-message">
+				<input type="hidden" id="layer-search">
+				<!--刷新当前表格-->
+				<input type="hidden" id="layer-reload">
+			</div>
+		</div>
+	</div>
+
+	<fieldset class="layui-elem-field layui-field-title">
+		<legend>数据列表</legend>
+	</fieldset>
+
+	<div class="layui-col-md12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-content">
+				<div class="layui-btn-group demoTable">
+					<!--表格上方的工具条-->
+					<include file='auto@index/tool' />
+				</div>
+
+				<!--表格-->
+				<table id="demo" lay-filter="test"></table>
+				<!--表格-->
+
+				<!--每行末尾的编辑工具-->
+				<script type="text/html" id="barDemo">
+					<include file='auto@index/tool_item_html' />
+				</script>
+				<!--每行末尾的编辑工具-->
+
+				<!--特殊的单元格-->
+				<include file='auto@switch/index/table_special' />
+
+				<!--<script type="text/html" id="checkbox">-->
+				<!--<input type="checkbox" name="lock" value="{{d.id}}" title="锁定" lay-filter="checkbox" {{ d.id == 10006 ? 'checked' : '' }}>-->
+				<!--</script>-->
+				<!--特殊的单元格-->
+			</div>
+		</div>
+	</div>
+</block>
+
+<block name="foot">
+	<script>
+		layui.use(['form', 'layedit', 'laydate', 'table'], function(){
+			var table = layui.table;
+			var form = layui.form
+				,layer = layui.layer
+				,layedit = layui.layedit
+				,laydate = layui.laydate;
+
+			var indexTable = table.render({
+				elem: '#demo'
+				,url: '{$ajaxTable}' //数据接口
+				,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+					groups: 10 //只显示 10 个连续页码
+				} //开启分页
+				,cols: [{$col}],
+				done: function(res, curr, count){		//渲染结束后的操作
+					//如果是异步请求数据方式，res即为你接口返回的信息。
+					//如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+					console.log(res);
+					//得到当前页码
+					console.log(curr);
+					//得到数据总量
+					console.log(count);
+				},
+				loading:true
+			});
+
+			//监听工具条, 后台生成
+			table.on('tool(test)', function(obj){
+				var data = obj.data;
+				<include file='auto@index/tool_item_js' />
+			});
+
+			//监听SW操作
+			form.on('switch(sw)', function(obj){
+				layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+			});
+
+			//搜索栏提交
+			$('#search-submit').click(function(){
+				var where = {};
+
+				$('#search').serializeArray().forEach(function(value){
+					where[value.name] = value.value;
+				});
+
+				indexTable.reload({
+					page: {
+						curr: 1 //重新从第 1 页开始
+					}
+					,where: where
+				});
+			});
+
+			//搜索栏中的日期范围功能
+			laydate.render({
+				elem: '.layui-data-range'
+				,type: 'datetime'
+				,range: '~'
+				,format: 'yyyy-M-d H:m:s'
+			});
+
+			//用来传递信息
+			$('#layer-message').change(function(){
+			});
+
+			//弹出窗口的使用
+			$('#layer-reload').change(function(){
+				indexTable.reload({});
+			});
+		});
+
+		/**
+		 * 从数据json中获取所有id, 格式为1,2,3
+		 * @param json
+		 * @returns {string}
+		 */
+		function getId(json){
+			if(json.length == 0){
+				return null;
+
+			}else{
+				var ids = [];
+				json.forEach(function(item){
+					ids.push(item.id);
+				});
+				return ids.join(',');
+			}
+		}
+
+		//打开带有idList的连接
+		function openIdListIframe(title, url){
+			var data = layui.table.checkStatus("demo").data;
+			if(getId(data)){
+				$alert.iframe(title, url+"?idList="+getId(data));
+			}else{
+				$alert.timer("请选择数据后在进行操作", false);
+			}
+		}
+	</script>
+</block>

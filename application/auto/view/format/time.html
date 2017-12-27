@@ -1,0 +1,15 @@
+<if condition="'[value]' != '[val'.'ue]'">
+	<php>$__value = "[value]";</php>
+	<present name="$$__value">
+		<php>$__value = $$__value;</php>
+	</present>
+
+<else/>
+	<php>$__value = 0;</php>
+</if>
+
+<if condition="'[item]' != '[it'.'em]'">
+	<php>$__item = "[item]";</php>
+</if>
+
+<input type="text" name="{$$__item->name}" placeholder="yyyy-MM-dd" lay-verify="[verify]" autocomplete="off" class="layui-input layui-date [class]" value="{$__value?:''}">
