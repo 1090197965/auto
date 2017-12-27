@@ -38,6 +38,7 @@ abstract class AbstractAuto extends Base implements IAuto
 	 * 2, 自动注入配置,模版以及数据库操控类
 	 */
 	public function _initialize(){
+		dump('git pull test');die;//QP:TODO: 断点调试
 		parent::_initialize();
 		$c = &$this->_config;
 
