@@ -12,6 +12,7 @@ use app\auto\my_interface\IConfig;
 class Config implements IConfig{
 	const DEFAULT_PAGE_LIMIT = 20;
 
+	private $handleDeleteId = null;
 	private $ajaxIndexTableData = null;
 	private $HandleEditName = null;
 	private $urlIndexName = null;
@@ -107,6 +108,13 @@ class Config implements IConfig{
 	public function setJoin(array $join) {
 		$this->join = $join;
 	}
+	public function getHandleDeleteId() {
+		return $this->handleDeleteId;
+	}
+	public function setHandleDeleteId($handleDeleteId) {
+		$this->handleDeleteId = $handleDeleteId;
+	}
+
 
 	//---事件-----------------------------------------------
 	//这里的操作都是on开头, 一个是防止重复名称, 另一个是方便代码提示

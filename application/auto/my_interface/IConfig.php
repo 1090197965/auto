@@ -118,6 +118,19 @@ interface IConfig {
 	 * @return 获得编辑处理页面链接
 	 */
 	public function getHandleEditName();
+
+	/**
+	 * 删除指定id数据的接口
+	 * @param $idList
+	 *
+	 * @return mixed
+	 */
+	public function setHandleDeleteId($idList);
+	/**
+	 * 获得删除指定id数据的接口
+	 * @return mixed
+	 */
+	public function getHandleDeleteId();
 	//-----------------------------------------
 
 	//事件--------------------------------------
