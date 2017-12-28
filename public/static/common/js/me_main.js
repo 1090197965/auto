@@ -129,25 +129,27 @@
 				return inputValue;
 			});
 		},
-		delete	: function(){
+		delete	: function(message, url){
+			message = getType(message, '删除后将无法恢复!');
 			swal({
 				title: "确定删除吗？",
-				text: "你将无法恢复该虚拟文件！",
+				text: message,
 				type: "warning",
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "确定删除！",
-				cancelButtonText: "取消删除！",
+				confirmButtonText: "确定",
+				cancelButtonText: "取消",
+				showLoaderOnConfirm	: true,
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
 			function(isConfirm){
 				if (isConfirm) {
-					swal("删除！", "你的虚拟文件已经被删除。",
-						"success");
-				} else {
-					swal("取消！", "你的虚拟文件是安全的:)",
-						"error");
+					$.get(url, function(data){
+						$alert.auto(data);
+					}, 'json');
+				}else{
+					$alert.error("操作已取消!", "取消！");
 				}
 			});
 		},
