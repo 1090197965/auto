@@ -72,8 +72,8 @@
 		info	: function(value, title, call){
 			this._type(value, title, 'info', call);
 		},
-		auto	: function(value){
-			this._type(value);
+		auto	: function(value, call){
+			this._type(value, undefined, undefined, call);
 		},
 		error	: function(value, title){
 			this._type(value, title, 'error');
@@ -129,7 +129,7 @@
 				return inputValue;
 			});
 		},
-		delete	: function(message, url){
+		delete	: function(message, url, call){
 			message = getType(message, '删除后将无法恢复!');
 			swal({
 				title: "确定删除吗？",
@@ -146,7 +146,7 @@
 			function(isConfirm){
 				if (isConfirm) {
 					$.get(url, function(data){
-						$alert.auto(data);
+						$alert.auto(data, call);
 					}, 'json');
 				}else{
 					$alert.error("操作已取消!", "取消！");
