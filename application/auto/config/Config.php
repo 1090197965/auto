@@ -221,11 +221,17 @@ class Config implements IConfig{
 	//---事件-----------------------------------------------
 
 	//显示的按钮---------------------------------------------
+	const TOOL_ADD = 'add';
+	const TOOL_EDIT = 'edit';
+	const TOOL_DELETE = 'delete';
+	const TOOL_ITEM_EDIT = 'edit';
+	const TOOL_ITEM_DETETE = 'delete';
+
 	protected $indexTool = [];
 	protected $indexItemTool = [];
 
 	public function addIndexTool($name, $title, $onClick, $ico = '', $class = '') {
-		$this->indexTool[] = [
+		$this->indexTool[$name] = [
 			'name'	=> $name,
 			'title'	=> $title,
 			'click'	=> $onClick,
@@ -236,8 +242,15 @@ class Config implements IConfig{
 	public function getIndexTool() {
 		return $this->indexTool;
 	}
+	public function removeIndexTool($name) {
+		unset($this->indexTool[$name]);
+	}
+	public function removeIndexItemTool($name) {
+		unset($this->indexItemTool[$name]);
+	}
+
 	public function addIndexItemTool($name, $title, $onClick, $ico = '', $class = '') {
-		$this->indexItemTool[] = [
+		$this->indexItemTool[$name] = [
 			'name'	=> $name,
 			'title'	=> $title,
 			'click'	=> $onClick,
@@ -248,6 +261,7 @@ class Config implements IConfig{
 	public function getIndexItemTool() {
 		return $this->indexItemTool;
 	}
+
 	//显示的按钮---------------------------------------------
 
 	//检查错误, 会抛出异常

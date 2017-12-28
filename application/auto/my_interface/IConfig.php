@@ -192,7 +192,7 @@ interface IConfig {
 
 	/**
 	 * 设置工具按钮
-	 * @param $name string 工具的标识
+	 * @param $name string 工具的标识 使用常量, TOOL开头的
 	 * @param $title string 显示名称
 	 * @param $onClick string 点击js事件
 	 * @param $ico string 图标, 可以在这里找到http://www.layui.com/doc/element/icon.html
@@ -209,9 +209,17 @@ interface IConfig {
 	public function getIndexTool();
 
 	/**
+	 * 删除显示的工具按钮
+	 * @param $name string 使用常量, TOOL开头的
+	 *
+	 * @return mixed
+	 */
+	public function removeIndexTool($name);
+
+	/**
 	 * 设置列表工具
 	 *
-	 * @param $name
+	 * @param $name string 使用常量, TOOL_ITEM 开头的
 	 * @param $title
 	 * @param $onClick
 	 * @param $ico
@@ -228,6 +236,14 @@ interface IConfig {
 	 * @return mixed
 	 */
 	public function getIndexItemTool();
+
+	/**
+	 * 删除显示的工具按钮
+	 * @param $name string 使用常量, TOOL_ITEM 开头的
+	 *
+	 * @return mixed
+	 */
+	public function removeIndexItemTool($name);
 	//显示的按钮---------------------------------
 
 	//检查配置是否有问题
