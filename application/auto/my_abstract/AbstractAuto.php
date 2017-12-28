@@ -52,16 +52,13 @@ abstract class AbstractAuto extends Base implements IAuto
 			$c->setHandleEditName(url('editHandle'));
 			$c->setHandleDeleteId(url('deleteIdHandle'));
 
-			//执行子类的配置
-			$this->setConfig();
-
 			//设置显示的按钮, 这里需要懂layui框架
 			//添加按钮
-			$c->addIndexTool('add', '添加', '
+			$c->addIndexTool(Config::TOOL_ADD, '添加', '
 				$alert.iframe("添加", "' . $c->getUrlEditName() . '")
 			', '&#xe654;');
 			//删除按钮
-			$c->addIndexTool('delete', '删除', '
+			$c->addIndexTool(Config::TOOL_DELETE, '删除', '
 				openIdList(function(idList){
 					$alert.delete("确认删除编号为: "+idList+" 的数据吗? ", "'.$c->getHandleDeleteId().'?id="+idList, function(){
 						tableReload();
@@ -69,18 +66,14 @@ abstract class AbstractAuto extends Base implements IAuto
 				})
 			', '&#xe640;');
 			//批量编辑
-			$c->addIndexTool('edit', '批量编辑', '
+			$c->addIndexTool(Config::TOOL_EDIT, '批量编辑', '
 				openIdList(function(idList){
 					$alert.iframe("批量编辑", "' . $c->getUrlEditName() . '?id="+idList);
 				})
 			', '&#xe642;');
 
-//			$c->addIndexItemTool('detail', '查看', '
-//				layer.msg("选中的手机号是"+data.phone);
-//			', 'layui-btn-primary');
-
 			//编辑
-			$c->addIndexItemTool('edit', '编辑', '
+			$c->addIndexItemTool(Config::TOOL_ITEM_EDIT, '编辑', '
 				layui.layer.open({
 					type: 2,
 					title: "很多时候，我们想最大化看，比如像这个页面。",
@@ -92,12 +85,14 @@ abstract class AbstractAuto extends Base implements IAuto
 				});
 			', '&#xe642;');
 			//删除
-			$c->addIndexItemTool('del', '删除', '
-				layer.confirm("真的删除行么", function(index){
-					obj.del();
-					layer.close(index);
+			$c->addIndexItemTool(Config::TOOL_ITEM_DETETE, '删除', '
+				$alert.delete("确认删除编号为: "+data.id+" 的数据吗? ", "'.$c->getHandleDeleteId().'?id="+data.id, function(){
+					tableReload();
 				});
 			', '&#xe640;', 'layui-btn-danger');
+
+			//执行子类的配置
+			$this->setConfig();
 
 			//检查配置是否有问题
 			$c->check();
