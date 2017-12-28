@@ -156,8 +156,13 @@ abstract class AbstractAuto extends Base implements IAuto
 
 	/**
 	 * 处理编辑操作
+	 * 接受类型: post
 	 */
 	public function editHandle(){
+//		$data = input('get.');
+//		if($this->_handle->validate($data)){
+//
+//		}
 		$this->_handle->editSave();
 	}
 
@@ -170,7 +175,8 @@ abstract class AbstractAuto extends Base implements IAuto
 	 * 返回的参数 : 标准ajax返回
 	 */
 	public function deleteIdHandle(){
-		$this->message($this->_handle->deleteId(), '删除成功!', $this->_handle->getError());
+		$id = input('get.id');
+		$this->message($this->_handle->deleteId($id), '删除成功!', $this->_handle->getError());
 	}
 
 	public function getConfig(){
