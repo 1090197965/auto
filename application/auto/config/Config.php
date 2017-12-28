@@ -216,23 +216,25 @@ class Config implements IConfig{
 	protected $indexTool = [];
 	protected $indexItemTool = [];
 
-	public function addIndexTool($name, $title, $onClick, $class = '') {
+	public function addIndexTool($name, $title, $onClick, $ico = '', $class = '') {
 		$this->indexTool[] = [
 			'name'	=> $name,
 			'title'	=> $title,
 			'click'	=> $onClick,
-			'class'	=> $class
+			'class'	=> $class,
+			'ico'	=> $ico
 		];
 	}
 	public function getIndexTool() {
 		return $this->indexTool;
 	}
-	public function addIndexItemTool($name, $title, $onClick, $class) {
+	public function addIndexItemTool($name, $title, $onClick, $ico = '', $class = '') {
 		$this->indexItemTool[] = [
 			'name'	=> $name,
 			'title'	=> $title,
 			'click'	=> $onClick,
-			'class'	=> $class
+			'class'	=> $class,
+			'ico'	=> $ico
 		];
 	}
 	public function getIndexItemTool() {

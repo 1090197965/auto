@@ -177,7 +177,17 @@ interface IConfig {
 
 	//显示的按钮---------------------------------
 
-	public function addIndexTool($name, $title, $onClick, $class);
+	/**
+	 * 设置工具按钮
+	 * @param $name string 工具的标识
+	 * @param $title string 显示名称
+	 * @param $onClick string 点击js事件
+	 * @param $ico string 图标, 可以在这里找到http://www.layui.com/doc/element/icon.html
+	 * @param $class string 自定义class
+	 *
+	 * @return mixed
+	 */
+	public function addIndexTool($name, $title, $onClick, $ico, $class);
 
 	/**
 	 * 获得工具按钮
@@ -187,11 +197,18 @@ interface IConfig {
 
 	/**
 	 * 设置列表工具
-	 * @param array $tool
+	 *
+	 * @param $name
+	 * @param $title
+	 * @param $onClick
+	 * @param $ico
+	 * @param $class
 	 *
 	 * @return mixed
+	 * @internal param array $tool
+	 *
 	 */
-	public function addIndexItemTool($name, $title, $onClick, $class);
+	public function addIndexItemTool($name, $title, $onClick, $ico, $class);
 
 	/**
 	 * 获得列表工具

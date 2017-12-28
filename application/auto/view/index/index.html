@@ -24,8 +24,8 @@
 	">
 		<legend>
 			搜索栏
-			<i class="search-up layui-icon layui-anim layui-anim-up" style="display: none;"></i>
-			<i class="search-down layui-icon layui-anim layui-anim-up"></i>
+			<i class="search-up layui-icon layui-anim layui-anim-up" style="display: none;">&#xe619;</i>
+			<i class="search-down layui-icon layui-anim layui-anim-up">&#xe61a;</i>
 		</legend>
 	</fieldset>
 
@@ -40,11 +40,11 @@
 						<hr>
 						<div class="layui-col-md4 layui-col-md-offset5">
 							<button class="layui-btn" lay-submit type="button" id="search-submit">
-								<i class="layui-icon"></i>
+								<i class="layui-icon">&#xe615;</i>
 								搜索
 							</button>
 							<button class="layui-btn layui-btn-danger" type="reset" onclick="$alert.messageB('重置成功')">
-								<i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop">ဂ</i>
+								<i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop">&#x1002;</i>
 								重置
 							</button>
 						</div>
@@ -186,10 +186,10 @@
 		}
 
 		//打开带有idList的连接
-		function openIdListIframe(title, url){
+		function openIdList(call){
 			var data = layui.table.checkStatus("demo").data;
 			if(getId(data)){
-				$alert.iframe(title, url+"?idList="+getId(data));
+				call(getId(data));
 			}else{
 				$alert.timer("请选择数据后在进行操作", false);
 			}

@@ -55,18 +55,28 @@ abstract class AbstractAuto extends Base implements IAuto
 			$this->setConfig();
 
 			//设置显示的按钮, 这里需要懂layui框架
+			//添加按钮
 			$c->addIndexTool('add', '添加', '
-				$alert.iframe("添加", "'.$c->getUrlEditName().'")
-			');
-
+				$alert.iframe("添加", "' . $c->getUrlEditName() . '")
+			', '&#xe654;');
+			//删除按钮
+			$c->addIndexTool('delete', '删除', '
+				openIdList(function(idList){
+					$alert.delete("确认删除: ( "+idList+" ) 选中的行吗?");
+				})
+			', '&#xe640;');
+			//批量编辑
 			$c->addIndexTool('edit', '批量编辑', '
-				openIdListIframe("批量添加", "'.$c->getUrlEditName().'");
-			');
+				openIdList(function(idList){
+					$alert.iframe("批量编辑", "' . $c->getUrlEditName() . '?idList="+idList);
+				})
+			', '&#xe642;');
 
 //			$c->addIndexItemTool('detail', '查看', '
 //				layer.msg("选中的手机号是"+data.phone);
 //			', 'layui-btn-primary');
 
+			//编辑
 			$c->addIndexItemTool('edit', '编辑', '
 				layui.layer.open({
 					type: 2,
@@ -75,16 +85,16 @@ abstract class AbstractAuto extends Base implements IAuto
 					shade: 0.5,
 					maxmin: true, //开启最大化最小化按钮
 					area: ["993px", "500px"],
-					content: "'.$c->getUrlEditName().'?id="+data.id
+					content: "' . $c->getUrlEditName() . '?id="+data.id
 				});
-			', '');
-
+			', '&#xe642;');
+			//删除
 			$c->addIndexItemTool('del', '删除', '
 				layer.confirm("真的删除行么", function(index){
 					obj.del();
 					layer.close(index);
 				});
-			', 'layui-btn-danger');
+			', '&#xe640;', 'layui-btn-danger');
 
 			//检查配置是否有问题
 			$c->check();
