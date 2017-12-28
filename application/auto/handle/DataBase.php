@@ -124,4 +124,12 @@ class DataBase implements IDataBase{
 			return null;
 		}
 	}
+
+	public function saveForm(array $data){
+		return $this->db->update($data);
+	}
+
+	public function addForm(array $data){
+		return $this->db->insert($data);
+	}
 }

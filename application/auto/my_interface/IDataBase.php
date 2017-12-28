@@ -40,5 +40,18 @@ interface IDataBase {
 	 */
 	public function removeIdData($id);
 
+	/**
+	 * 保存表单
+	 * @param array $data
+	 *
+	 * @return mixed
+	 */
+	public function saveForm(array $data);
+	public function addForm(array $data);
+
+	/**
+	 * 获取错误信息
+	 * @return mixed
+	 */
 	public function getError();
 }
