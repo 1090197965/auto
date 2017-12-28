@@ -31,4 +31,36 @@ interface IDataBase {
 	 * @return mixed
 	 */
 	public function getIdInfo($id);
+
+	/**
+	 * 根据id删除数据
+	 * @param $id string 可以是 1,2,3这样多数, 也可以是1这样单个
+	 *
+	 * @return mixed
+	 */
+	public function removeIdData($id);
+
+	/**
+	 * 保存表单
+	 * @param array $data
+	 *
+	 * @return mixed
+	 */
+	public function saveForm(array $data);
+	public function addForm(array $data);
+
+	/**
+	 * 获取错误信息
+	 * @return mixed
+	 */
+	public function getError();
+
+	/**
+	 * 根据id修改指定的信息
+	 * @param $id string 如果是1,2这种格式, 则批量修改
+	 * @param $data
+	 *
+	 * @return mixed
+	 */
+	public function update($id, $data);
 }

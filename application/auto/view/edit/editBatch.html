@@ -1,0 +1,72 @@
+<extend name="auto@base"/>
+
+<block name="body">
+	<div class="wrapper-content gray-bg">
+		<div class="row wrapper white-bg">
+			<br>
+			<form class="layui-form" action="{$handleEditBatch}" method="post">
+				<fieldset class="layui-elem-field layui-field-title">
+					<legend>批量编辑 (编号为: {$id} 的数据)</legend>
+				</fieldset>
+
+				<input type="hidden" name="id" autocomplete="off" value="{$id}">
+
+				<foreach name="batch" item="value" key="key">
+					<php>$value = $field[$value];</php>
+					<php>$verify = '';</php>
+					<php>$type = $value->type;</php>
+					<php>$atValue = '';</php>
+					<include file='auto@switch/edit/form' />
+				</foreach>
+
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</block>
+
+<block name="foot">
+	<script>
+		layui.use(['form', 'layedit', 'laydate'], function(){
+			var form = layui.form
+					,layer = layui.layer
+					,layedit = layui.layedit
+					,laydate = layui.laydate;
+
+			//监听提交
+			form.on('submit(demo1)', function(data){
+				$.post(
+					'{$handleEditBatch}',
+					$('.layui-form').serialize(),
+					function(data){
+						//判断是否是iframe窗口
+						//如果不是, 这里会有一个异常, 所以使用try来判断
+						try{
+							//注意：parent 是 JS 自带的全局对象，可用于操作父页面
+							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+
+							if(data.result){
+								parent.$alert.message(true, '操作成功');
+								//刷新列表页面
+								parent.$('#layer-reload').change();
+								parent.layer.close(index);	//关闭窗口
+
+							}else{
+								parent.layer.msg(data.message, {shade: 0.3,shadeClose :true}); //提示信息
+							}
+
+						}catch(error){
+							$alert.auto(data);
+						}
+					},
+					'json'
+				);
+				return false;
+			});
+		});
+	</script>
+</block>

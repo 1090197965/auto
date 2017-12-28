@@ -31,6 +31,18 @@
 	<include file='common@public/css/main' />
 	<block name="head"></block>
 
+	<style>
+		body {
+			padding: 1% 2%;
+		}
+		.hide {
+			display: none;
+		}
+		.i-tips {
+			color: #636363;
+		}
+	</style>
+
 </head>
 <body>
 	<block name="body">
@@ -64,6 +76,15 @@
 			laydate.render({
 				elem: '.layui-date',
 				type: 'datetime'
+			});
+		});
+
+		//提示信息
+		$('.i-tips').mouseover(function(){
+			var $this = $(this);
+			layer.tips($this.attr('i-message'), '.'+$this.attr('i-tips-class'), {
+				tips: [1, '#009688'],
+				time: 3000
 			});
 		});
 	</script>

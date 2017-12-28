@@ -80,7 +80,7 @@ class Field{
 
 	/**
 	 * 获取主键名
-	 * @return idName
+	 * @return string
 	 */
 	public function getIdName(){
 	    return $this->id->name;

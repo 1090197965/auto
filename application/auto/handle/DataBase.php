@@ -29,6 +29,12 @@ class DataBase implements IDataBase{
 	 */
 	private $db;
 
+	private $error;
+
+	public function getError() {
+		return $this->error;
+	}
+
 	public function setConfig(IConfig $config){
 		$this->_config = $config;
 		$this->db = Db::name($this->_config->getTableName());
@@ -47,8 +53,6 @@ class DataBase implements IDataBase{
 
 		$c = $this->_config;
 		$data = $this->db
-//			->alias(self::ALIAS)
-//			->join($c->getJoin())
 			//设置显示的字段
 			->field($c->getFieldIndexShow())
 			//默认筛选
@@ -108,5 +112,29 @@ class DataBase implements IDataBase{
 		}
 
 		return $data;
+	}
+
+	public function removeIdData($id) {
+		$result = $this->db->where($this->_config->getField()->getIdName(), 'in', $id)->delete();
+
+		if($result){
+			return $result;
+		}else{
+			$this->error = '删除数据失败';
+			return null;
+		}
+	}
+
+	public function saveForm(array $data){
+		return $this->db->update($data);
+	}
+
+	public function addForm(array $data){
+		return $this->db->insert($data);
+	}
+
+	public function update($id, $data){
+		$this->error = '保存失败';
+		return $this->db->where($this->_config->getField()->getIdName(), 'in', $id)->update($data);
 	}
 }

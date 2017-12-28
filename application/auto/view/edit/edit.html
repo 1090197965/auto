@@ -5,7 +5,18 @@
 		<div class="row wrapper white-bg">
 			<br>
 			<form class="layui-form" action="{$handleEdit}" method="post">
-				<include file='auto@switch/edit/form' />
+				<foreach name="editShow" item="value" key="key">
+					<php>$value = $field[$value];</php>
+					<php>$verify = $value->isRequired ? 'required' : '';</php>
+					<php>$type = $value->type;</php>
+					<present name="$info">
+						<!--如果是编辑则使用保存的值, 否则使用默认值-->
+						<php>$atValue = $info[$value->name];</php>
+						<else/>
+						<php>$atValue = $value->default;</php>
+					</present>
+					<include file='auto@switch/edit/form' />
+				</foreach>
 
 				<div class="layui-form-item">
 					<div class="layui-input-block">
