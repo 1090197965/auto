@@ -176,7 +176,7 @@ abstract class AbstractAuto extends Base implements IAuto
 		$id = input('get.id');
 		$this->returnError($id, '为查询到数据', true);
 
-		$this->ajax(true, 'test');
+		$this->ajax(true, "删除编号为 $id 的数据");
 	}
 
 	public function getConfig(){
