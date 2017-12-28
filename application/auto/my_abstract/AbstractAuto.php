@@ -50,8 +50,9 @@ abstract class AbstractAuto extends Base implements IAuto
 			$c->setUrlEditName(url('edit'));
 			$c->setAjaxIndexTableData(url('ajaxGetIndexTableData'));
 			$c->setHandleEditName(url('editHandle'));
+			$c->setHandleDeleteId(url('deleteIdHandle'));
 
-			//执行子类的配置 devtest
+			//执行子类的配置
 			$this->setConfig();
 
 			//设置显示的按钮, 这里需要懂layui框架
@@ -62,13 +63,13 @@ abstract class AbstractAuto extends Base implements IAuto
 			//删除按钮
 			$c->addIndexTool('delete', '删除', '
 				openIdList(function(idList){
-					$alert.delete("确认删除: "+idList+" 选中的行吗? ");
+					$alert.delete("确认删除编号为: "+idList+" 的数据吗? ", "'.$c->getHandleDeleteId().'?id="+idList);
 				})
 			', '&#xe640;');
 			//批量编辑
 			$c->addIndexTool('edit', '批量编辑', '
 				openIdList(function(idList){
-					$alert.iframe("批量编辑", "' . $c->getUrlEditName() . '?idList="+idList);
+					$alert.iframe("批量编辑", "' . $c->getUrlEditName() . '?id="+idList);
 				})
 			', '&#xe642;');
 
@@ -131,6 +132,18 @@ abstract class AbstractAuto extends Base implements IAuto
 
 	/**
 	 * 列表页的表数据接口
+	 * 提交类型 : get
+	 * 提交参数 : [
+	 * 		page 	=> 1,  //页码
+	 * 		limit 	=> 10, //分页数量
+	 * 		phone	=> 110 //需要搜索的字段, 以及字段的值
+	 * ]
+	 * 返回的参数 : [
+	 * 		code	=> 0,	//状态
+	 *		msg		=> '获取成功', //信息
+	 *		count	=> $page->total(), //查询的总数量
+	 *		data	=> $page->items()  //数据
+	 * ]
 	 */
 	public function ajaxGetIndexTableData(){
 		$this->_template->getTableData();
@@ -149,6 +162,21 @@ abstract class AbstractAuto extends Base implements IAuto
 	 */
 	public function editHandle(){
 		$this->_handle->editSave();
+	}
+
+	/**
+	 * 删除数据库数据的接口
+	 * 提交类型 : get
+	 * 提交参数 : [
+	 * 		id 	=> '1,2,3',  //id的值, 可以只是一个单值
+	 * ]
+	 * 返回的参数 : 标准ajax返回
+	 */
+	public function deleteIdHandle(){
+		$id = input('get.id');
+		$this->returnError($id, '为查询到数据', true);
+
+		$this->ajax(true, 'test');
 	}
 
 	public function getConfig(){
