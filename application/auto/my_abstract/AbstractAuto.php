@@ -62,7 +62,7 @@ abstract class AbstractAuto extends Base implements IAuto
 			//删除按钮
 			$c->addIndexTool('delete', '删除', '
 				openIdList(function(idList){
-					$alert.delete("确认删除: "+idList+" 选中的行吗?");
+					$alert.delete("确认删除: "+idList+" 选中的行吗? ");
 				})
 			', '&#xe640;');
 			//批量编辑
