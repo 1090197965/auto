@@ -7,6 +7,22 @@
 	 */
 namespace app\auto\config;
 
+/**
+ * Class Item
+ * @method checkName()
+ * @method checkWidth()
+ * @method checkOption()
+ * @method checkRemark()
+ * @method checkTitle()
+ * @method checkHtml()
+ * @method checkDefault()
+ * @method checkIsOnly()
+ * @method checkIsRequired()
+ * @method checkIsSearch()
+ * @method checkValidate()
+ *
+ * @package app\auto\config
+ */
 class Item {
 	//QP:TODO: 添加配置 添加变量后, 还需去get方法中设置形参以及常量
 	/**
@@ -84,6 +100,12 @@ class Item {
 	 * @var 是否可以搜索
 	 */
 	public $isSearch;
+	/**
+	 * 填写规则请参考 https://www.kancloud.cn/manual/thinkphp5/129356
+	 * @var 验证规则
+	 */
+	public $validate;
+	//需要注意, 如果添加了新的配置, 需要在get中设置, 并且需要在顶部设置check的提示方法
 
 	/**
 	 * 使用此方法获得一个字段信息
@@ -98,11 +120,12 @@ class Item {
 	 * @param      $default        默认值
 	 * @param      $isRequired     是否必须输入
 	 * @param      $isOnly         是否唯一
+	 * @param null $validate
 	 * @param      $html           自定义HTML表单
 	 *
 	 * @return Item
 	 */
-	public static function get($name, $type, $title, $remark = null, $isSearch = null, $width = null, $option = null, $default = null, $isRequired = null, $isOnly = null, $html = null) {
+	public static function get($name, $type, $title, $remark = null, $isSearch = null, $width = null, $option = null, $default = null, $isRequired = null, $isOnly = null, $validate = null, $html = null) {
 		$item = new Item();
 		$item->type = $type;
 		$item->name = $name;
@@ -115,6 +138,7 @@ class Item {
 		$item->isOnly = $isOnly;
 		$item->isRequired = $isRequired;
 		$item->isSearch = $isSearch;
+		$item->validate = $validate;
 
 		//启用类型可以设置默认值
 		if($type == Item::SW and empty($option))
@@ -124,13 +148,19 @@ class Item {
 	}
 
 	/**
-	 * 检测字段是否可用, 使用之前最好检查一下
-	 *
+	 * 检查字段是否存在并且设置
 	 * @param $name
+	 * @param $arguments
 	 *
 	 * @return bool
 	 */
-	public function checkField($name){
-		return !empty($this->$name);
+	public function __call($name, $arguments) {
+		if(strpos($name, 'check') === 0){
+			$checkField = lcfirst(ltrim($name, 'check'));
+			return !empty($this->$checkField);
+			
+		}else{
+			exception($name.'方法不存在');
+		}
 	}
 }

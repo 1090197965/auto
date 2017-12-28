@@ -82,6 +82,19 @@ interface IConfig {
 	 */
 	public function setFieldEditShow(array $fieldEditShow);
 
+	/**
+	 * 获取可以批量设置的列表
+	 * @return mixed
+	 */
+	public function getFieldBatch();
+	/**
+	 * 设置可以批量设置的字段
+	 * @param array $fieldBatch
+	 *
+	 * @return mixed
+	 */
+	public function setFieldBatch(array $fieldBatch);
+
 	//以下是页面跳转url的设置接口------------------
 	/**
 	 * @param mixed 设置首页链接
@@ -111,6 +124,15 @@ interface IConfig {
 	public function getUrlEditName();
 
 	/**
+	 * @param mixed 设置批量编辑页链接
+	 */
+	public function setUrlEditBatchName($url);
+	/**
+	 * @return 获取批量编辑页链接
+	 */
+	public function getUrlEditBatchName();
+
+	/**
 	 * @param null 设置编辑处理页面链接
 	 */
 	public function setHandleEditName($url);
@@ -118,6 +140,15 @@ interface IConfig {
 	 * @return 获得编辑处理页面链接
 	 */
 	public function getHandleEditName();
+
+	/**
+	 * @param null 设置批量编辑处理页面链接
+	 */
+	public function setHandleEditBatchName($url);
+	/**
+	 * @return 获得批量编辑处理页面链接
+	 */
+	public function getHandleEditBatchName();
 
 	/**
 	 * 删除指定id数据的接口
@@ -156,12 +187,6 @@ interface IConfig {
 	 * @return mixed
 	 */
 	public function onEdit();
-
-	/**
-	 * 添加前的检查操作
-	 * @return mixed
-	 */
-	public function onCheckAdd();
 
 	/**
 	 * 保存前的检查操作

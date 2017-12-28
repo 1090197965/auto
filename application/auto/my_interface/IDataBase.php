@@ -54,4 +54,13 @@ interface IDataBase {
 	 * @return mixed
 	 */
 	public function getError();
+
+	/**
+	 * 根据id修改指定的信息
+	 * @param $id string 如果是1,2这种格式, 则批量修改
+	 * @param $data
+	 *
+	 * @return mixed
+	 */
+	public function update($id, $data);
 }

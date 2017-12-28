@@ -15,8 +15,10 @@ class Config implements IConfig{
 	private $handleDeleteId = null;
 	private $ajaxIndexTableData = null;
 	private $HandleEditName = null;
+	private $HandleEditBatchName = null;
 	private $urlIndexName = null;
 	private $urlEditName = null;
+	private $urlEditBatchName = null;
 	private $tableName = null;
 	private $pageLimit = DEFAULT_INCLUDE_PATH;
 	private $where = null;
@@ -28,6 +30,7 @@ class Config implements IConfig{
 	private $field = null;
 	private $fieldIndexShow = null;
 	private $fieldEditShow = null;
+	private $fieldBatch = null;
 
 	public function getOrder() {
 		return $this->order;
@@ -114,13 +117,47 @@ class Config implements IConfig{
 	public function setHandleDeleteId($handleDeleteId) {
 		$this->handleDeleteId = $handleDeleteId;
 	}
+	public function getFieldBatch() {
+		return $this->fieldBatch;
+	}
+	public function setFieldBatch(array $fieldBatch) {
+		$this->fieldBatch = $fieldBatch;
+	}
+
+	/**
+	 * @return null
+	 */
+	public function getUrlEditBatchName() {
+		return $this->urlEditBatchName;
+	}
+
+	/**
+	 * @param null $urlEditBatchName
+	 */
+	public function setUrlEditBatchName($urlEditBatchName) {
+		$this->urlEditBatchName = $urlEditBatchName;
+	}
+
+	/**
+	 * @return null
+	 */
+	public function getHandleEditBatchName() {
+		return $this->HandleEditBatchName;
+	}
+
+	/**
+	 * @param null $HandleEditBatchName
+	 */
+	public function setHandleEditBatchName($HandleEditBatchName) {
+		$this->HandleEditBatchName = $HandleEditBatchName;
+	}
+
 
 
 	//---事件-----------------------------------------------
 	//这里的操作都是on开头, 一个是防止重复名称, 另一个是方便代码提示
 	//QP:TODO: 添加事件 如果需要添加时间的话, 则需要添加一个变量, 同时增加一个常量即可, 记得需要on开头
 	public $onEdit;
-	public $onCheckAdd;
 	public $onCheckSave;
 	public $onSearch;
 	public $onEnd;
@@ -128,7 +165,6 @@ class Config implements IConfig{
 
 	//QP:TODO: 添加事件 这里也需要添加, 需要EVENT开头
 	const EVENT_EDIT = 'Edit';
-	const EVENT_CHECK_ADD = 'CheckAdd';
 	const EVENT_CHECK_SAVE = 'CheckSave';
 	const EVENT_SEARCH = 'Search';
 	const EVENT_END = 'End';
@@ -144,10 +180,12 @@ class Config implements IConfig{
 				case self::EVENT_EDIT:
 					break;
 
-				case self::EVENT_CHECK_ADD:
-					break;
-
 				case self::EVENT_CHECK_SAVE:
+					dump('三个形参, [$data] [$saveType] 以及 [IHandle类]');
+					dump('data是获取到的表单信息');
+					dump('其中saveType有两种状态, 可以用Handle::SAVE 或者 Handle::ADD 来区别新增与保存这两种操作');
+					dump('第三个Ihandle类用来保存错误信息, 如果检查错误, 可以用Ihandle->setError("error info")来提示错误');
+					dump('最后返回值是true或者false, 如果返回true, 则继续进行, 如果反false, 则提示ihandle的错误, 并且总之终止操作, 返回失败的ajax信息');die;//QP:TODO: 断点调试
 					break;
 
 				case self::EVENT_SEARCH:
@@ -157,7 +195,7 @@ class Config implements IConfig{
 					break;
 
 				case self::EVENT_SHOW:
-					dump('一个形参 [$data], 值为一条数据库的信息, 为数组');die;//QP:TODO: 断点调试
+					dump('一个形参 [$data], 值为一条数据库的信息, 为数组');die;
 					break;
 			}
 		}
@@ -172,11 +210,6 @@ class Config implements IConfig{
 	public function onEdit(){
 		if(is_callable($this->onEdit)){
 			return call_user_func_array($this->onEdit, func_get_args());
-		}
-	}
-	public function onCheckAdd(){
-		if(is_callable($this->onCheckAdd)){
-			return call_user_func_array($this->onCheckAdd, func_get_args());
 		}
 	}
 	public function onCheckSave(){

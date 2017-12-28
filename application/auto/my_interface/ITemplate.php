@@ -37,6 +37,12 @@ interface ITemplate {
 	 */
 	public function vEdit();
 
+	/**
+	 * 批量操作模版
+	 * @return mixed
+	 */
+	public function vEditBatch();
+
 	public function getTableData();
 
 	public function createHTML();

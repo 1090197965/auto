@@ -8,9 +8,14 @@
 
 namespace app\auto\my_interface;
 interface IHandle {
-	public function editSave();
+	//QP:TODO: 加上备注
 	public function setDataBase(IDataBase $db);
 	public function setConfig(IConfig $config);
-	public function deleteId();
+	public function deleteId($id);
 	public function getError();
+	public function setError($error);
+	public function validate(array $data);
+	public function getForm(array $data);
+	public function editSave(array $data);
+	public function editOrSave();
 }

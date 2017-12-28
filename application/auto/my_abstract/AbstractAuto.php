@@ -2,6 +2,7 @@
 namespace app\auto\my_abstract;
 
 use app\auto\config\Config;
+use app\auto\config\Item;
 use app\auto\handle\DataBase;
 use app\auto\handle\Handle;
 use app\auto\my_interface\IDataBase;
@@ -12,6 +13,7 @@ use app\auto\my_interface\IAuto;
 use app\auto\my_interface\IConfig;
 use app\common\controller\Base;
 use think\Db;
+use think\Validate;
 
 abstract class AbstractAuto extends Base implements IAuto
 {
@@ -48,8 +50,12 @@ abstract class AbstractAuto extends Base implements IAuto
 			//设置基础的配置， 例如ajax接口地址， 编辑页面地址等等
 			$c->setUrlIndexName(url('index'));
 			$c->setUrlEditName(url('edit'));
+			$c->setUrlEditBatchName(url('editBatch'));
+
 			$c->setAjaxIndexTableData(url('ajaxGetIndexTableData'));
+
 			$c->setHandleEditName(url('editHandle'));
+			$c->setHandleEditBatchName(url('editBatchHandle'));
 			$c->setHandleDeleteId(url('deleteIdHandle'));
 
 			//设置显示的按钮, 这里需要懂layui框架
@@ -64,25 +70,11 @@ abstract class AbstractAuto extends Base implements IAuto
 						tableReload();
 					});
 				})
-			', '&#xe640;');
-			//批量编辑
-			$c->addIndexTool(Config::TOOL_EDIT, '批量编辑', '
-				openIdList(function(idList){
-					$alert.iframe("批量编辑", "' . $c->getUrlEditName() . '?id="+idList);
-				})
-			', '&#xe642;');
+			', '&#xe640;', 'layui-btn-danger');
 
 			//编辑
 			$c->addIndexItemTool(Config::TOOL_ITEM_EDIT, '编辑', '
-				layui.layer.open({
-					type: 2,
-					title: "很多时候，我们想最大化看，比如像这个页面。",
-					shadeClose: true,
-					shade: 0.5,
-					maxmin: true, //开启最大化最小化按钮
-					area: ["993px", "500px"],
-					content: "' . $c->getUrlEditName() . '?id="+data.id
-				});
+				$alert.iframe("编辑", "' . $c->getUrlEditName() . '?id="+data.id)
 			', '&#xe642;');
 			//删除
 			$c->addIndexItemTool(Config::TOOL_ITEM_DETETE, '删除', '
@@ -93,6 +85,14 @@ abstract class AbstractAuto extends Base implements IAuto
 
 			//执行子类的配置
 			$this->setConfig();
+
+			//批量编辑
+			if(!empty($c->getFieldBatch()))
+				$c->addIndexTool(Config::TOOL_EDIT, '批量编辑', '
+				openIdList(function(idList){
+					$alert.iframe("批量编辑", "' . $c->getUrlEditBatchName() . '?id="+idList);
+				})
+			', '&#xe642;');
 
 			//检查配置是否有问题
 			$c->check();
@@ -155,15 +155,70 @@ abstract class AbstractAuto extends Base implements IAuto
 	}
 
 	/**
+	 * 批量处理页面
+	 */
+	public function editBatch(){
+		return $this->_template->vEditBatch();
+	}
+
+	/**
 	 * 处理编辑操作
 	 * 接受类型: post
 	 */
 	public function editHandle(){
-//		$data = input('get.');
-//		if($this->_handle->validate($data)){
-//
-//		}
-		$this->_handle->editSave();
+		$data = input('post.');
+		if($this->_handle->validate($data)){
+			$data = $this->_handle->getForm($data);
+			$result = $this->_handle->editSave($data);
+			$this->message($result, '保存成功!', $this->_handle->getError());
+
+		}else
+			$this->ajax(false, $this->_handle->getError());
+	}
+
+	/**
+	 * 批量处理操作
+	 */
+	public function editBatchHandle(){
+		$idName = $this->_config->getField()->getIdName();
+		$data = input('post.');
+		//取出需要修改的主键
+		$id = $data[$idName];
+		//消除主键
+		unset($data[$idName]);
+
+		//筛选出填写了数据的表单
+		$data = array_filter($data, function($value){
+			return $value === '' ? false : true;
+		});
+
+		if(empty($data))
+			$this->ajax(false, '未获取到修改内容');
+
+		$field = $this->_config->getField()->getList();
+
+		//拼写验证规则
+		$rules = [];
+		foreach ($data as $name => $item) {
+			$item = $field[$name];
+			if($item instanceof Item){
+				if($item->checkValidate()){
+					$rules[$item->name . '|'. $item->title] = $item->validate;
+				}
+			}
+		}
+		//验证表单
+		$validate = new Validate($rules);
+		if (!$validate->check($data)) {
+			$this->ajax(false, $validate->getError());
+
+		}else{
+			$data = $this->_handle->getForm($data);
+			//保存
+			$result = $this->_dataBase->update($id, $data);
+
+			$this->message($result, '批量修改成功!', $this->_dataBase->getError());
+		}
 	}
 
 	/**

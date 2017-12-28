@@ -56,6 +56,9 @@ class Layui extends Base implements ITemplate{
 		$this->view->urlEdit	= $this->_config->getUrlEditName();			//编辑页地址
 		$this->view->handleEdit	= $this->_config->getHandleEditName();		//编辑页面处理地址
 
+		$this->view->urlEditBatch	= $this->_config->getUrlEditBatchName();			//批量编辑页地址
+		$this->view->handleEditBatch	= $this->_config->getHandleEditBatchName();		//批量编辑页面处理地址
+
 		//所有字段信息
 		$this->view->field = $this->_config->getField()->getList();
 		$this->view->editShow = $this->_config->getFieldEditShow();
@@ -78,14 +81,23 @@ class Layui extends Base implements ITemplate{
 
 	public function vEdit() {
 		$id = input('get.id', 0);
-		$type = input('get.type');
 
 		$this->view->id = $id;
-		$this->view->type = $type;
 
 		$this->view->info = $this->_dataBase->getIdInfo($id);
 
 		return $this->fetch('auto@edit/edit', [], $this->replace_str, $this->templateConfig);
+	}
+
+	public function vEditBatch(){
+		$id = input('get.id', 0);
+		if(empty($id))
+			$this->error('批量处理必须要选中才可进行操作');
+
+		$this->view->id = $id;
+		$this->view->batch = $this->_config->getFieldBatch();
+
+		return $this->fetch('auto@edit/editBatch', [], $this->replace_str, $this->templateConfig);
 	}
 
 	public function getTableData(){
@@ -136,7 +148,7 @@ class Layui extends Base implements ITemplate{
 					$t['templet'] = '#box-'.$item->name;
 				}
 
-				if($item->checkField('width')){
+				if($item->checkWidth()){
 					$t['width'] = $item->width;
 				}
 

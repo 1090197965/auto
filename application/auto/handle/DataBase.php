@@ -132,4 +132,9 @@ class DataBase implements IDataBase{
 	public function addForm(array $data){
 		return $this->db->insert($data);
 	}
+
+	public function update($id, $data){
+		$this->error = '保存失败';
+		return $this->db->where($this->_config->getField()->getIdName(), 'in', $id)->update($data);
+	}
 }

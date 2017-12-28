@@ -1,8 +1,8 @@
 <if condition="'[value]' != '[val'.'ue]'">
 	<php>$__value = "[value]";</php>
-	<present name="$$__value">
+	<if condition="isset($$__value) or $$__value === null">
 		<php>$__value = $$__value;</php>
-	</present>
+	</if>
 
 	<else/>
 	<php>$__value = '';</php>
