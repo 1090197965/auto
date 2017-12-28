@@ -31,4 +31,14 @@ interface IDataBase {
 	 * @return mixed
 	 */
 	public function getIdInfo($id);
+
+	/**
+	 * 根据id删除数据
+	 * @param $id string 可以是 1,2,3这样多数, 也可以是1这样单个
+	 *
+	 * @return mixed
+	 */
+	public function removeIdData($id);
+
+	public function getError();
 }

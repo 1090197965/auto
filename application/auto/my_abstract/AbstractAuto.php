@@ -170,10 +170,7 @@ abstract class AbstractAuto extends Base implements IAuto
 	 * 返回的参数 : 标准ajax返回
 	 */
 	public function deleteIdHandle(){
-		$id = input('get.id');
-		$this->returnError($id, '为查询到数据', true);
-
-		$this->ajax(true, "删除编号为 $id 的数据");
+		$this->message($this->_handle->deleteId(), '删除成功!', $this->_handle->getError());
 	}
 
 	public function getConfig(){

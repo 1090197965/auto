@@ -20,6 +20,11 @@ class Handle implements IHandle {
 	 * @var IConfig
 	 */
 	protected $_config = null;
+	private $error = null;
+
+	public function getError() {
+		return $this->error;
+	}
 
 	public function setDataBase(IDataBase $db) {
 		if(empty($this->_db))
@@ -33,5 +38,22 @@ class Handle implements IHandle {
 
 	public function editSave() {
 
+	}
+
+	public function deleteId(){
+		$id = input('get.id');
+		if(empty($id)){
+			$this->error = '未查询到数据';
+			return false;
+		}
+
+		$result = $this->_db->removeIdData($id);
+
+		if($result)
+			return true;
+		else{
+			$this->error = $this->_db->getError();
+			return false;
+		}
 	}
 }

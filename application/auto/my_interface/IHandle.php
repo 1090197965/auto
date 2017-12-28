@@ -11,4 +11,6 @@ interface IHandle {
 	public function editSave();
 	public function setDataBase(IDataBase $db);
 	public function setConfig(IConfig $config);
+	public function deleteId();
+	public function getError();
 }
