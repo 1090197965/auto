@@ -51,7 +51,7 @@ abstract class AbstractAuto extends Base implements IAuto
 			$c->setAjaxIndexTableData(url('ajaxGetIndexTableData'));
 			$c->setHandleEditName(url('editHandle'));
 
-			//执行子类的配置
+			//执行子类的配置 devtest
 			$this->setConfig();
 
 			//设置显示的按钮, 这里需要懂layui框架
