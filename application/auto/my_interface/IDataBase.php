@@ -63,4 +63,14 @@ interface IDataBase {
 	 * @return mixed
 	 */
 	public function update($id, $data);
+
+	/**
+	 * 指定字段是否有重复值
+	 * @param $name
+	 * @param $value
+	 * @param $id int 不填写则查询到数据就返回false, 如果填写了, 则查询到仅一条, 且id相等, 则返回true
+	 *
+	 * @return mixed true则表示目前查无重复值
+	 */
+	public function isOnly($name, $value, $id);
 }

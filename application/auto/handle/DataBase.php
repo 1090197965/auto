@@ -137,4 +137,29 @@ class DataBase implements IDataBase{
 		$this->error = '保存失败';
 		return $this->db->where($this->_config->getField()->getIdName(), 'in', $id)->update($data);
 	}
+
+	public function isOnly($name, $value, $id = null){
+		$data = $this->db->where($name, $value)->count();
+		
+		//如果没查询到数据直接true
+		if($data == 0)
+			return true;
+
+		else{
+			//如果没设置id, 则只要有数据都是直接false
+			if(empty($id)){
+				return false;
+
+			}else{
+				//如果大于一条, 则直接false
+				if($data > 1){
+					return false;
+
+				}else{
+					$dbId = $this->db->where($name, $value)->value('id');
+					return $id == $dbId ? true : false;
+				}
+			}
+		}
+	}
 }

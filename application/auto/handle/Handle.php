@@ -58,29 +58,50 @@ class Handle implements IHandle {
 
 	public function validate(array $data){
 		$field = $this->_config->getField();
+		$idName = $field->getIdName();
+		$idValue = $data[$idName];
+
+		//验证规则
 		$rules = [];
+		//需要检查重复性的字段
+		$only = [];
 		//生成tp5的检查器规则
 		foreach ($field->getList() as $item) {
 			if($item instanceof Item){
 				$t = [];
+				//检查是否是必须输入的字段
 				if($item->checkIsRequired()){
 					$t[] = 'require';
 				}
-				
+
+				//自定义的验证
 				if($item->checkValidate()){
 					$t[] = $item->validate;
 				}
+
+				//保存需要检测是否重复的字段
+				if($item->checkIsOnly())
+					$only[] = $item;
 				
 				if(!empty($t))
 					$rules[$item->name.'|'.$item->title] = join('|', $t);
 			}
 		}
+		//先验证器验证
 		$validate = new Validate($rules);
 		if (!$validate->check($data)) {
 			$this->error = $validate->getError();
 			return false;
 
 		}else{
+			//重复性检查
+			foreach ($only as $item) {
+				if(!$this->_db->isOnly($item->name, $data[$item->name], $idValue)){
+					$this->error = $item->title . ' 已存在, 不能重复, 请重试';
+					return false;
+				}
+			}
+
 			//自定义检查错误
 			if($this->_config->issetOn(Config::EVENT_CHECK_SAVE)){
 				$result = $this->_config->onCheckSave($data, $this->editOrSave(), $this);
@@ -131,7 +152,9 @@ class Handle implements IHandle {
 	public function editSave(array $data){
 		$this->error = '保存失败';
 		if($this->editOrSave() == Handle::SAVE){
-			return $this->_db->saveForm($data);
+			$result = $this->_db->saveForm($data);
+
+			return $result;
 		}else{
 			return $this->_db->addForm($data);
 		}
