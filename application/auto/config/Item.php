@@ -125,8 +125,32 @@ class Item {
 	 *
 	 * @return Item
 	 */
-	public static function get($name, $type, $title, $remark = null, $isSearch = null, $width = null, $option = null, $default = null, $isRequired = null, $isOnly = null, $validate = null, $html = null) {
+	public static function get($name, $type = '', $title = '', $remark = null, $isSearch = null, $width = null, $option = null, $default = null, $isRequired = null, $isOnly = null, $validate = null, $html = null) {
 		$item = new Item();
+
+		switch($name){
+			case 'id':
+				$type = Item::ID;
+				$title = '编号';
+				$isSearch = true;
+				$remark = '唯一标识符';
+				break;
+
+			case 'status':
+				$type = Item::SW;
+				$title = '状态';
+				$isSearch = true;
+				break;
+
+			case 'add_time':
+				$type = Item::TIME;
+				$title = '添加时间';
+				$remark = '数据创建的时间';
+				$isSearch = true;
+				$default = time();
+				break;
+		}
+
 		$item->type = $type;
 		$item->name = $name;
 		$item->width = $width;
