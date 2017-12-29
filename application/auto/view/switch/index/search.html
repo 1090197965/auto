@@ -5,25 +5,34 @@
 		<switch name="$type">
 			<case value=":$Item::ID">
 				<div class="layui-inline">
-					<label class="layui-form-label">{$value->title}</label>
+					<label class="layui-form-label">
+						{$value->title}
+						<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
+					</label>
 					<div class="layui-input-block">
-						<input type="text" name="{$value->name}" autocomplete="off" placeholder="{$value->remark}" class="layui-input">
+						<input type="text" name="{$value->name}" autocomplete="off" class="layui-input">
 					</div>
 				</div>
 			</case>
 
 			<case value=":$Item::STRING">
 				<div class="layui-inline">
-					<label class="layui-form-label">{$value->title}</label>
+					<label class="layui-form-label">
+						{$value->title}
+						<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
+					</label>
 					<div class="layui-input-block">
-						<input type="text" name="{$value->name}" autocomplete="off" placeholder="{$value->remark}" class="layui-input">
+						<input type="text" name="{$value->name}" autocomplete="off"  class="layui-input">
 					</div>
 				</div>
 			</case>
 
 			<case value=":$Item::SW">
 				<div class="layui-inline">
-					<label class="layui-form-label">{$value->title}</label>
+					<label class="layui-form-label">
+						{$value->title}
+						<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
+					</label>
 					<div class="layui-input-block">
 						<include file='auto@format/select' item="value"/>
 					</div>
@@ -32,16 +41,22 @@
 
 			<case value=":$Item::INT">
 				<div class="layui-inline">
-					<label class="layui-form-label">{$value->title}</label>
+					<label class="layui-form-label">
+						{$value->title}
+						
+					</label>
 					<div class="layui-input-block">
-						<input type="text" name="{$value->name}" autocomplete="off" placeholder="{$value->remark}" class="layui-input">
+						<input type="text" name="{$value->name}" autocomplete="off" class="layui-input">
 					</div>
 				</div>
 			</case>
 
 			<case value=":$Item::SELECT">
 				<div class="layui-inline">
-					<label class="layui-form-label">{$value->title}</label>
+					<label class="layui-form-label">
+						{$value->title}
+						<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
+					</label>
 					<div class="layui-input-inline">
 						<include file='auto@format/select' item="value"/>
 					</div>
@@ -50,7 +65,9 @@
 
 			<case value=":$Item::TIME">
 				<div class="layui-inline">
-					<label class="layui-form-label">{$value->title}</label>
+					<label class="layui-form-label">
+						{$value->title}
+					</label>
 					<div class="layui-input-inline">
 						<input type="text" class="layui-input layui-data-range" name="{$value->name}" placeholder="开始 到 结束">
 					</div>
