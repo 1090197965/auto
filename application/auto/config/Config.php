@@ -291,6 +291,7 @@ class Config implements IConfig{
 			'ico'	=> $ico
 		];
 	}
+
 	public function getIndexItemTool() {
 		return $this->indexItemTool;
 	}

@@ -69,6 +69,8 @@ class Handle implements IHandle {
 		foreach ($field->getList() as $item) {
 			if($item instanceof Item){
 				$t = [];
+				//QP:TODO: 这里应该默认检测, 例如int默认检测number等
+
 				//检查是否是必须输入的字段
 				if($item->checkIsRequired()){
 					$t[] = 'require';

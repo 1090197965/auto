@@ -251,10 +251,9 @@ interface IConfig {
 	 * @param $class
 	 *
 	 * @return mixed
-	 * @internal param array $tool
 	 *
 	 */
-	public function addIndexItemTool($name, $title, $onClick, $ico, $class);
+	public function addIndexItemTool($name, $title, $onClick, $ico, $class = '');
 
 	/**
 	 * 获得列表工具
