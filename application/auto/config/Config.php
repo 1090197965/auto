@@ -196,6 +196,11 @@ class Config implements IConfig{
 					break;
 
 				case self::EVENT_SEARCH:
+					dump('两个形参, [$get] 和 [$query]');//QP:TODO: 断点调试
+					dump('第一个形参是获取到的需要搜索的数据');//QP:TODO: 断点调试
+					dump('第二个是搜索用的对象');//QP:TODO: 断点调试
+					dump('直接使用$query->where(xxx)的方式来进行搜索, 具体方式可以参考tp5的闭包搜索');//QP:TODO: 断点调试
+					dump('直接使用即可, 最后不需要return $query');die;//QP:TODO: 断点调试
 					break;
 
 				case self::EVENT_END:

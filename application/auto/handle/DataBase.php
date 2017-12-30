@@ -95,6 +95,10 @@ class DataBase implements IDataBase{
 						}
 					}
 				}
+
+				if($this->_config->issetOn(Config::EVENT_SEARCH)){
+					$this->_config->onSearch($get, $q);
+				}
 			})
 			->paginate($limit);
 
