@@ -95,7 +95,14 @@ class Item {
 	 */
 	protected $title;
 	/**
-	 * @var 自定义html
+	 * 需要注意
+	 * 输入的是一个数组, 格式如下
+	 * ['widget地址', []widge需要的参数]]
+	 * 同时, 自己写的widge必须要有两个形参, $value和$args
+	 * 其中$value是编辑时候的值, 或者默认值之类
+	 * 而args是用来传递自定义的信息
+	 *
+	 * @var array
 	 */
 	protected $html;
 	/**
@@ -207,14 +214,14 @@ class Item {
 	public function __set($name, $value){
 		switch($name){
 			//如果是html类型, 则自动导入模版
-			case 'html':
-				if(!empty($value)){
-					if(!is_array($value)){
-						exception('自定义html需要使用widget来实现, 配置值只能是数组');
-					}
-					$value = widget(reset($value), next($value));
-				}
-				break;
+//			case 'html':
+//				if(!empty($value)){
+//					if(!is_array($value)){
+//						exception('自定义html需要使用widget来实现, 配置值只能是数组');
+//					}
+//					$value = widget(reset($value), next($value));
+//				}
+//				break;
 		}
 
 		return $this->$name = $value;

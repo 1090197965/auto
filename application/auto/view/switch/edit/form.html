@@ -8,7 +8,7 @@
 			</notempty>
 		</label>
 		<div class="layui-input-block">
-			{$value->html}
+			{:widget(reset($value->html), ['value'=>$atValue, 'args'=>next($value->html)])}
 		</div>
 	</div>
 <else/>
