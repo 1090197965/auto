@@ -48,25 +48,25 @@ class Field{
 						break;
 
 					case Item::SELECT:
-						if(empty($item->option))
+						if(!$item->checkOption())
 							exception('SELECT类型则option不能为空');
 						break;
 
 					case Item::CHECKBOX:
-						if(empty($item->option))
+						if(!$item->checkOption())
 							exception('CHECKBOX类型则option不能为空');
 						break;
 				}
 
-				if(empty($item->name)){
+				if(!$item->checkName()){
 					exception('字段名称不能为空');
 				}
 
-				if(empty($item->type)){
+				if(!$item->checkType()){
 					exception('字段类型不能为空');
 				}
 
-				if(empty($item->title)){
+				if(!$item->checkTitle()){
 					exception('字段显示名不能为空');
 				}
 			}
