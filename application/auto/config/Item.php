@@ -10,6 +10,7 @@ namespace app\auto\config;
 /**
  * Class Item
  * @method checkName()
+ * @method checkType()
  * @method checkWidth()
  * @method checkOption()
  * @method checkRemark()
@@ -21,20 +22,33 @@ namespace app\auto\config;
  * @method checkIsSearch()
  * @method checkValidate()
  *
+ * @property string name
+ * @property array option
+ * @property int type
+ * @property int width
+ * @property string remark
+ * @property string title
+ * @property string html
+ * @property mixed default
+ * @property bool isOnly
+ * @property bool isRequired
+ * @property bool isSearch
+ * @property string validate
+ *
  * @package app\auto\config
  */
 class Item {
-	//QP:TODO: 添加配置 添加变量后, 还需去get方法中设置形参以及常量
+	//QP:TODO: 添加配置 添加变量后, 还需去get方法中设置形参以及常量, 并且要在主注释中加入method和property用来代码提示
 	/**
 	 * @var 类型
 	 */
-	public $type;
+	protected $type;
 
 	/**
 	 * 特殊显示的单元格
 	 * @var array
 	 */
-	private static $specialItem = [
+	public static $specialItem = [
 		self::SELECT, self::SW, self::TIME
 	];
 
@@ -63,48 +77,48 @@ class Item {
 	/**
 	 * @var 字段名
 	 */
-	public $name;
+	protected $name;
 	/**
 	 * @var 类型为SELECT和CHECKBOX等才可以进行设置
 	 */
-	public $option;
+	protected $option;
 	/**
 	 * @var 宽度
 	 */
-	public $width;
+	protected $width;
 	/**
 	 * @var 备注
 	 */
-	public $remark;
+	protected $remark;
 	/**
 	 * @var 显示名称
 	 */
-	public $title;
+	protected $title;
 	/**
 	 * @var 自定义html
 	 */
-	public $html;
+	protected $html;
 	/**
 	 * @var 默认值
 	 */
-	public $default;
+	protected $default;
 	/**
 	 * @var 是否唯一
 	 */
-	public $isOnly;
+	protected $isOnly;
 	/**
 	 * @var 是否必须填写
 	 */
-	public $isRequired;
+	protected $isRequired;
 	/**
 	 * @var 是否可以搜索
 	 */
-	public $isSearch;
+	protected $isSearch;
 	/**
 	 * 填写规则请参考 https://www.kancloud.cn/manual/thinkphp5/129356
 	 * @var 验证规则
 	 */
-	public $validate;
+	protected $validate;
 	//需要注意, 如果添加了新的配置, 需要在get中设置, 并且需要在顶部设置check的提示方法
 
 	/**
@@ -153,22 +167,22 @@ class Item {
 			}
 		}
 
-		$item->type = $type;
-		$item->name = $name;
-		$item->width = $width;
-		$item->option = $option;
-		$item->remark = $remark;
-		$item->title = $title;
-		$item->html = $html;
-		$item->default = $default;
-		$item->isOnly = $isOnly;
-		$item->isRequired = $isRequired;
-		$item->isSearch = $isSearch;
-		$item->validate = $validate;
+		$item->__set('type', $type);
+		$item->__set('name', $name);
+		$item->__set('width', $width);
+		$item->__set('option', $option);
+		$item->__set('remark', $remark);
+		$item->__set('title', $title);
+		$item->__set('html', $html);
+		$item->__set('default', $default);
+		$item->__set('isOnly', $isOnly);
+		$item->__set('isRequired', $isRequired);
+		$item->__set('isSearch', $isSearch);
+		$item->__set('validate', $validate);
 
 		//启用类型可以设置默认值
 		if($type == Item::SW and empty($option))
-			$item->option = ['关闭', '开启'];
+			$item->__set('option', ['关闭', '开启']);
 
 		return $item;
 	}
@@ -188,5 +202,21 @@ class Item {
 		}else{
 			exception($name.'方法不存在');
 		}
+	}
+
+	public function __set($name, $value){
+		switch($name){
+			//如果是html类型, 则自动导入模版
+			case 'html':
+				if(!empty($value))
+					$value = view($value)->getContent();
+				break;
+		}
+
+		return $this->$name = $value;
+	}
+
+	public function &__get($name) {
+		return $this->$name;
 	}
 }
