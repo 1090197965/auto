@@ -99,7 +99,7 @@ class Item {
 	 * 输入的是一个数组, 格式如下
 	 * ['widget地址', []widge需要的参数]]
 	 * 同时, 自己写的widge必须要有两个形参, $value和$args
-	 * 其中$value是编辑时候的值, 或者默认值之类
+	 * 其中$value是编辑时候的值, 或者默认值之类, 同时$value得设置默认值, 例如$value=''
 	 * 而args是用来传递自定义的信息
 	 *
 	 * @var array
