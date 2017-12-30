@@ -6,7 +6,14 @@
 		<switch name="$type">
 			<case value=":$Item::SW">
 				<!--开关单元格-->
-				<input type="checkbox" name="sex" value="{{d.{$value->name}}}" lay-skin="switch" lay-text="{:end($value->option)}|{:reset($value->option)}" lay-filter="sw" {{ d.{$value->name} == 1 ? 'checked' : '' }}>
+				<!--<input type="checkbox" name="sex" value="{{d.{$value->name}}}" lay-skin="switch" lay-text="{:end($value->option)}|{:reset($value->option)}" lay-filter="sw" {{ d.{$value->name} == 1 ? 'checked' : '' }}>-->
+
+				{{#var option = {:json_encode($value->option, JSON_UNESCAPED_UNICODE)};}}
+				{{#  if(d.{$value->name} == 1){ }}
+					<span class="layui-badge layui-bg-green">{{option[d.{$value->name}]}}</span>
+				{{#  } else { }}
+					<span class="layui-badge layui-bg-gray">{{option[d.{$value->name}]}}</span>
+				{{#  } }}
 			</case>
 
 			<case value=":$Item::SELECT">
