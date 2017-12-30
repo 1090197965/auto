@@ -148,6 +148,11 @@ class Handle implements IHandle {
 			}
 		}
 
+		//获取表单数据后事件
+		if($this->_config->issetOn(Config::EVENT_GET_FORM_LAST)){
+			$newData = $this->_config->onGetFormLast($newData);
+		}
+
 		return $newData;
 	}
 

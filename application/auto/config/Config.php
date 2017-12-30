@@ -156,12 +156,18 @@ class Config implements IConfig{
 
 	//---事件-----------------------------------------------
 	//这里的操作都是on开头, 一个是防止重复名称, 另一个是方便代码提示
-	//QP:TODO: 添加事件 如果需要添加时间的话, 则需要添加一个变量, 同时增加一个常量即可, 记得需要on开头
-	public $onEdit;
-	public $onCheckSave;
-	public $onSearch;
-	public $onEnd;
-	public $onShow;		//完成
+	//QP:TODO: 添加事件 如果需要添加事件的话
+	//第一需要添加变量, $onXXX
+	//第二部需要添加常量, 需要EVENT_XXX, EVENT_开头是必须的
+	//第三部需要去IConfig接口声明 onXXX()
+	//第四部需要在这个类中实现这个 onXXX()接口
+
+	protected $onEdit;
+	protected $onCheckSave;
+	protected $onSearch;
+	protected $onEnd;
+	protected $onShow;		//完成
+	protected $onGetFormLast;
 
 	//QP:TODO: 添加事件 这里也需要添加, 需要EVENT开头
 	const EVENT_EDIT = 'Edit';
@@ -169,6 +175,7 @@ class Config implements IConfig{
 	const EVENT_SEARCH = 'Search';
 	const EVENT_END = 'End';
 	const EVENT_SHOW = 'Show';
+	const EVENT_GET_FORM_LAST = 'GetFormLast';
 
 	public function on($event, callable $function, $isDisplayKeys = false) {
 		$name = 'on' . $event;
@@ -195,7 +202,12 @@ class Config implements IConfig{
 					break;
 
 				case self::EVENT_SHOW:
-					dump('一个形参 [$data], 值为一条数据库的信息, 为数组');die;
+					dump('一个形参 [$data], 值为一条数据库的信息, 为数组');
+					dump('直接return处理好的数据即可');die;//QP:TODO: 断点调试
+					break;
+
+				case self::EVENT_GET_FORM_LAST:
+					dump('一个形参 [$data], 值为通过表单提交获取到的数据, 需要注意的是, 这里获得的$data是进过程序预处理的数据');die;//QP:TODO: 断点调试
 					break;
 			}
 		}
@@ -230,6 +242,11 @@ class Config implements IConfig{
 	public function onShow(){
 		if(is_callable($this->onShow)){
 			return call_user_func_array($this->onShow, func_get_args());
+		}
+	}
+	public function onGetFormLast() {
+		if(is_callable($this->onGetFormLast)){
+			return call_user_func_array($this->onGetFormLast, func_get_args());
 		}
 	}
 

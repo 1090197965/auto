@@ -211,6 +211,12 @@ interface IConfig {
 	 * @return mixed
 	 */
 	public function onShow();
+
+	/**
+	 * 这里是提取表单后, 获取表单数据的事件
+	 * @return mixed
+	 */
+	public function onGetFormLast();
 	//事件--------------------------------------
 
 	//显示的按钮---------------------------------
