@@ -208,8 +208,12 @@ class Item {
 		switch($name){
 			//如果是html类型, 则自动导入模版
 			case 'html':
-				if(!empty($value))
-					$value = view($value)->getContent();
+				if(!empty($value)){
+					if(!is_array($value)){
+						exception('自定义html需要使用widget来实现, 配置值只能是数组');
+					}
+					$value = widget(reset($value), next($value));
+				}
 				break;
 		}
 
