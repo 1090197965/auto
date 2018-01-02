@@ -152,6 +152,7 @@ class Item {
 		if(empty($type)){
 			switch($name){
 				case 'id':
+					$width = 60;
 					$type = Item::ID;
 					$title = '编号';
 					$isSearch = true;
