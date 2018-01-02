@@ -59,6 +59,10 @@ abstract class AbstractAuto extends Base implements IAuto
 			$c->setHandleDeleteId(url('deleteIdHandle'));
 
 			//设置显示的按钮, 这里需要懂layui框架
+			$c->addIndexTool(Config::TOOL_RELOAD, '', '
+				 location.reload();
+			', '&#x1002;');
+
 			//添加按钮
 			$c->addIndexTool(Config::TOOL_ADD, '添加', '
 				$alert.iframe("添加", "' . $c->getUrlEditName() . '")

@@ -278,6 +278,7 @@ class Config implements IConfig{
 	//显示的按钮---------------------------------------------
 	const TOOL_ADD = 'add';
 	const TOOL_EDIT = 'edit';
+	const TOOL_RELOAD = 'reload';
 	const TOOL_DELETE = 'delete';
 	const TOOL_ITEM_EDIT = 'edit';
 	const TOOL_ITEM_DETETE = 'delete';
