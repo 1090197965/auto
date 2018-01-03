@@ -41,86 +41,79 @@ abstract class AbstractAuto extends Base implements IAuto
 	 */
 	public function _initialize(){
 		parent::_initialize();
-		$c = &$this->_config;
+		$this->_config = new Config();
+		$this->_template = new Layui();
+		$this->_dataBase = new DataBase();
+		$this->_handle = new Handle();
 
 		//设置配置类
-		if(empty($this->_config)){
-			$c = new Config();
+		$c = &$this->_config;
 
-			//设置基础的配置， 例如ajax接口地址， 编辑页面地址等等
-			$c->setUrlIndexName(url('index'));
-			$c->setUrlEditName(url('edit'));
-			$c->setUrlEditBatchName(url('editBatch'));
+		//设置基础的配置， 例如ajax接口地址， 编辑页面地址等等
+		$c->setUrlIndexName(url('index'));
+		$c->setUrlEditName(url('edit'));
+		$c->setUrlEditBatchName(url('editBatch'));
 
-			$c->setAjaxIndexTableData(url('ajaxGetIndexTableData'));
+		$c->setAjaxIndexTableData(url('ajaxGetIndexTableData'));
 
-			$c->setHandleEditName(url('editHandle'));
-			$c->setHandleEditBatchName(url('editBatchHandle'));
-			$c->setHandleDeleteId(url('deleteIdHandle'));
+		$c->setHandleEditName(url('editHandle'));
+		$c->setHandleEditBatchName(url('editBatchHandle'));
+		$c->setHandleDeleteId(url('deleteIdHandle'));
 
-			//设置显示的按钮, 这里需要懂layui框架
-			$c->addIndexTool(Config::TOOL_RELOAD, '', '
-				 location.reload();
-			', '&#x1002;');
+		//执行子类的配置
+		$this->setConfig();
 
-			//添加按钮
-			$c->addIndexTool(Config::TOOL_ADD, '添加', '
-				$alert.iframe("添加", "' . $c->getUrlEditName() . '")
-			', '&#xe654;');
-			//删除按钮
-			$c->addIndexTool(Config::TOOL_DELETE, '删除', '
-				openIdList(function(idList){
-					$alert.delete("确认删除编号为: "+idList+" 的数据吗? ", "'.$c->getHandleDeleteId().'?id="+idList, function(){
-						tableReload();
-					});
-				})
-			', '&#xe640;', 'layui-btn-danger');
+		//批量编辑
+		if(!empty($c->getFieldBatch()))
+			$this->_template->addIndexTool(ITemplate::TOOL_EDIT, '批量编辑', '
+			openIdList(function(idList){
+				$alert.iframe("批量编辑", "' . $c->getUrlEditBatchName() . '?id="+idList);
+			})
+		', '&#xe642;');
 
-			//编辑
-			$c->addIndexItemTool(Config::TOOL_ITEM_EDIT, '编辑', '
-				$alert.iframe("编辑", "' . $c->getUrlEditName() . '?id="+data.id)
-			', '&#xe642;');
-			//删除
-			$c->addIndexItemTool(Config::TOOL_ITEM_DETETE, '删除', '
-				$alert.delete("确认删除编号为: "+data.id+" 的数据吗? ", "'.$c->getHandleDeleteId().'?id="+data.id, function(){
+		//检查配置是否有问题
+		$c->check();
+
+		//注入配置
+		$this->_dataBase->setConfig($c);
+
+		//注入配置
+		$this->_handle->setConfig($c);
+		$this->_handle->setDataBase($this->_dataBase);
+
+		//注入配置
+		$this->_template->setConfig($c);
+		$this->_template->setDataBase($this->_dataBase);
+
+		//设置显示的按钮, 这里需要懂layui框架
+		$this->_template->addIndexTool(ITemplate::TOOL_RELOAD, '', '
+			 location.reload();
+		', '&#x1002;');
+
+		//添加按钮
+		$this->_template->addIndexTool(ITemplate::TOOL_ADD, '添加', '
+			$alert.iframe("添加", "' . $c->getUrlEditName() . '")
+		', '&#xe654;');
+
+		//删除按钮
+		$this->_template->addIndexTool(ITemplate::TOOL_DELETE, '删除', '
+			openIdList(function(idList){
+				$alert.delete("确认删除编号为: "+idList+" 的数据吗? ", "'.$c->getHandleDeleteId().'?id="+idList, function(){
 					tableReload();
 				});
-			', '&#xe640;', 'layui-btn-danger');
+			})
+		', '&#xe640;', 'layui-btn-danger');
 
-			//执行子类的配置
-			$this->setConfig();
-
-			//批量编辑
-			if(!empty($c->getFieldBatch()))
-				$c->addIndexTool(Config::TOOL_EDIT, '批量编辑', '
-				openIdList(function(idList){
-					$alert.iframe("批量编辑", "' . $c->getUrlEditBatchName() . '?id="+idList);
-				})
-			', '&#xe642;');
-
-			//检查配置是否有问题
-			$c->check();
-		}
-
-		//注入数据库操作类
-		if(empty($this->_dataBase)){
-			$this->_dataBase = new DataBase();
-			$this->_dataBase->setConfig($c);
-		}
-
-		//逻辑层
-		if(empty($this->_handle)){
-			$this->_handle = new Handle();
-			$this->_handle->setConfig($c);
-			$this->_handle->setDataBase($this->_dataBase);
-		}
-
-		//注入模版类
-		if(empty($this->_template)){
-			$this->_template = new Layui();
-			$this->_template->setConfig($c);
-			$this->_template->setDataBase($this->_dataBase);
-		}
+		//编辑
+		$this->_template->addIndexItemTool(ITemplate::TOOL_ITEM_EDIT, '编辑', '
+			$alert.iframe("编辑", "' . $c->getUrlEditName() . '?id="+data.id)
+		', '&#xe642;');
+		//删除
+		$this->_template->addIndexItemTool(ITemplate::TOOL_ITEM_DETETE, '删除', '
+			$alert.delete("确认删除编号为: "+data.id+" 的数据吗? ", "'.$c->getHandleDeleteId().'?id="+data.id, function(){
+				tableReload();
+			});
+		', '&#xe640;', 'layui-btn-danger');
 	}
 
 	/**

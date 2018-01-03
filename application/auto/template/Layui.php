@@ -73,8 +73,8 @@ class Layui extends Base implements ITemplate{
 
 	public function vIndex(){
 		$this->view->col = json_encode($this->getTableColInfo());
-		$this->view->tool = $this->_config->getIndexTool();
-		$this->view->itemTool = $this->_config->getIndexItemTool();
+		$this->view->tool = $this->getIndexTool();
+		$this->view->itemTool = $this->getIndexItemTool();
 
 		return $this->fetch('auto@index/index', [], $this->replace_str, $this->templateConfig);
 	}
@@ -168,4 +168,50 @@ class Layui extends Base implements ITemplate{
 	public function createHTML() {
 		// TODO: Implement createHTML() method.
 	}
+
+	public function getIframe($url){
+
+	}
+
+	//显示的按钮---------------------------------------------
+	protected $indexTool = [];
+	protected $hiddenTool = [];
+	protected $indexItemTool = [];
+	protected $hiddenItemTool = [];
+
+	public function addIndexTool($name, $title, $onClick, $ico = '', $class = '') {
+		if(!in_array($name, $this->hiddenTool)){
+			$this->indexTool[$name] = [
+				'name'	=> $name,
+				'title'	=> $title,
+				'click'	=> $onClick,
+				'class'	=> $class,
+				'ico'	=> $ico
+			];
+		}
+	}
+	public function getIndexTool() {
+		return $this->indexTool;
+	}
+	public function removeIndexTool($name) {
+		$this->hiddenTool[$name] = $name;
+	}
+	public function removeIndexItemTool($name) {
+		$this->hiddenItemTool[$name] = $name;
+	}
+	public function addIndexItemTool($name, $title, $onClick, $ico = '', $class = '') {
+		if(!in_array($name, $this->hiddenItemTool)){
+			$this->indexItemTool[$name] = [
+				'name'	=> $name,
+				'title'	=> $title,
+				'click'	=> $onClick,
+				'class'	=> $class,
+				'ico'	=> $ico
+			];
+		}
+	}
+	public function getIndexItemTool() {
+		return $this->indexItemTool;
+	}
+	//显示的按钮---------------------------------------------
 }

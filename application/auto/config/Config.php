@@ -275,52 +275,6 @@ class Config implements IConfig{
 	}
 	//---事件-----------------------------------------------
 
-	//显示的按钮---------------------------------------------
-	const TOOL_ADD = 'add';
-	const TOOL_EDIT = 'edit';
-	const TOOL_RELOAD = 'reload';
-	const TOOL_DELETE = 'delete';
-	const TOOL_ITEM_EDIT = 'edit';
-	const TOOL_ITEM_DETETE = 'delete';
-
-	protected $indexTool = [];
-	protected $indexItemTool = [];
-
-	public function addIndexTool($name, $title, $onClick, $ico = '', $class = '') {
-		$this->indexTool[$name] = [
-			'name'	=> $name,
-			'title'	=> $title,
-			'click'	=> $onClick,
-			'class'	=> $class,
-			'ico'	=> $ico
-		];
-	}
-	public function getIndexTool() {
-		return $this->indexTool;
-	}
-	public function removeIndexTool($name) {
-		unset($this->indexTool[$name]);
-	}
-	public function removeIndexItemTool($name) {
-		unset($this->indexItemTool[$name]);
-	}
-
-	public function addIndexItemTool($name, $title, $onClick, $ico = '', $class = '') {
-		$this->indexItemTool[$name] = [
-			'name'	=> $name,
-			'title'	=> $title,
-			'click'	=> $onClick,
-			'class'	=> $class,
-			'ico'	=> $ico
-		];
-	}
-
-	public function getIndexItemTool() {
-		return $this->indexItemTool;
-	}
-
-	//显示的按钮---------------------------------------------
-
 	//检查错误, 会抛出异常
 	public function check(){
 		if(empty($this->urlIndexName)){
