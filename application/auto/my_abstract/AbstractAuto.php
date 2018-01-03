@@ -63,14 +63,6 @@ abstract class AbstractAuto extends Base implements IAuto
 		//执行子类的配置
 		$this->setConfig();
 
-		//批量编辑
-		if(!empty($c->getFieldBatch()))
-			$this->_template->addIndexTool(ITemplate::TOOL_EDIT, '批量编辑', '
-			openIdList(function(idList){
-				$alert.iframe("批量编辑", "' . $c->getUrlEditBatchName() . '?id="+idList);
-			})
-		', '&#xe642;');
-
 		//检查配置是否有问题
 		$c->check();
 
@@ -91,9 +83,12 @@ abstract class AbstractAuto extends Base implements IAuto
 		', '&#x1002;');
 
 		//添加按钮
-		$this->_template->addIndexTool(ITemplate::TOOL_ADD, '添加', '
-			$alert.iframe("添加", "' . $c->getUrlEditName() . '")
-		', '&#xe654;');
+		$this->_template->addIndexTool(
+			ITemplate::TOOL_ADD,
+			'添加',
+			$this->_template->getJSOpenIframe($c->getUrlEditName(), '添加'),
+			'&#xe654;'
+		);
 
 		//删除按钮
 		$this->_template->addIndexTool(ITemplate::TOOL_DELETE, '删除', '
@@ -104,16 +99,26 @@ abstract class AbstractAuto extends Base implements IAuto
 			})
 		', '&#xe640;', 'layui-btn-danger');
 
-		//编辑
-		$this->_template->addIndexItemTool(ITemplate::TOOL_ITEM_EDIT, '编辑', '
-			$alert.iframe("编辑", "' . $c->getUrlEditName() . '?id="+data.id)
-		', '&#xe642;');
-		//删除
+		//批量编辑
+		if(!empty($c->getFieldBatch()))
+			$this->_template->addIndexTool(
+				ITemplate::TOOL_EDIT,
+				'批量编辑',
+				$this->_template->getJSOpenCheckboxIframe($c->getUrlEditBatchName(), '批量编辑'),
+				'&#xe642;'
+			);
+
+		//行编辑
+		$this->_template->addIndexItemTool(ITemplate::TOOL_ITEM_EDIT, '编辑',
+			$this->_template->getJSOpenItemIdIframe($c->getUrlEditName(), '编辑')
+			, '&#xe642;');
+		//行删除
 		$this->_template->addIndexItemTool(ITemplate::TOOL_ITEM_DETETE, '删除', '
 			$alert.delete("确认删除编号为: "+data.id+" 的数据吗? ", "'.$c->getHandleDeleteId().'?id="+data.id, function(){
 				tableReload();
 			});
 		', '&#xe640;', 'layui-btn-danger');
+
 	}
 
 	/**

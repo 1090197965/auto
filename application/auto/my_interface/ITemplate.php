@@ -51,13 +51,35 @@ interface ITemplate {
 
 	public function createHTML();
 
+	//生成js代码------------------------------------------
 	/**
-	 * 根据连接获得弹出iframe的js代码
+	 * 根据url生成弹窗的代码, 需要注意, 生成的代码不会传递任何参数, 也就是当前页面打开此处窗口的功能而已
 	 * @param $url
 	 *
 	 * @return mixed
 	 */
-	public function getIframe($url);
+	public function getJSOpenIframe($url, $title);
+
+	/**
+	 * 根据url生成检查选中, 并且弹窗的代码
+	 * 需要注意, 这个会先检测是否选中, 如果有选中则打开iframe窗口
+	 * 此窗口会带有一个get值, 值的内容为选中的id, 格式为 1,32,45 这样
+	 * @param $url
+	 *
+	 * @return mixed
+	 */
+	public function getJSOpenCheckboxIframe($url, $title);
+
+	/**
+	 * 行工具使用, 只能用于行按钮
+	 * 使用的时候有get传递一个id值, 需要注意
+	 * @param $url
+	 * @param $title
+	 *
+	 * @return mixed
+	 */
+	public function getJSOpenItemIdIframe($url, $title);
+	//生成js代码--------------------------------------------
 
 	//显示的按钮---------------------------------
 	const TOOL_ADD = 'add';
@@ -71,13 +93,13 @@ interface ITemplate {
 	 * 设置工具按钮
 	 * @param $name string 工具的标识 使用常量, TOOL开头的
 	 * @param $title string 显示名称
-	 * @param $onClick string 点击js事件, 如果为连接, 则自动弹出iframe
+	 * @param $onClickJavascript string 点击js事件
 	 * @param $ico string 图标, 可以在这里找到http://www.layui.com/doc/element/icon.html
 	 * @param $class string 自定义class
 	 *
 	 * @return mixed
 	 */
-	public function addIndexTool($name, $title, $onClick, $ico = '', $class = '');
+	public function addIndexTool($name, $title, $onClickJavascript, $ico = '', $class = '');
 
 	/**
 	 * 获得工具按钮
@@ -98,14 +120,14 @@ interface ITemplate {
 	 *
 	 * @param $name string 使用常量, TOOL_ITEM 开头的
 	 * @param $title string 按钮名称
-	 * @param $onClick string 点击事件, 如果为连接, 则自动弹出iframe
+	 * @param $onClickJavascript string 点击事件
 	 * @param $ico string 图标
 	 * @param $class string 类
 	 *
 	 * @return mixed
 	 *
 	 */
-	public function addIndexItemTool($name, $title, $onClick, $ico = '', $class = '');
+	public function addIndexItemTool($name, $title, $onClickJavascript, $ico = '', $class = '');
 
 	/**
 	 * 获得列表工具

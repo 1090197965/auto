@@ -169,9 +169,25 @@ class Layui extends Base implements ITemplate{
 		// TODO: Implement createHTML() method.
 	}
 
-	public function getIframe($url){
-
+	//生成js代码--------------------------------------------
+	public function getJSOpenIframe($url, $title){
+		return '
+			$alert.iframe("'.$title.'", "' . $url . '")
+		';
 	}
+	public function getJSOpenCheckboxIframe($url, $title){
+		return '
+			openIdList(function(idList){
+				$alert.iframe("'.$title.'", "' . $url . '?id="+idList);
+			})
+		';
+	}
+	public function getJSOpenItemIdIframe($url, $title) {
+		return '
+			$alert.iframe("'.$title.'", "' . $url . '?id="+data.id)
+		';
+	}
+	//生成js代码--------------------------------------------
 
 	//显示的按钮---------------------------------------------
 	protected $indexTool = [];
