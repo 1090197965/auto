@@ -80,7 +80,7 @@
 		});
 
 		//提示信息
-		$('.i-tips').mouseover(function(){
+		$('.i-tips').on('mouseover', function(){
 			var $this = $(this);
 			layer.tips($this.attr('i-message'), '.'+$this.attr('i-tips-class'), {
 				tips: [1, '#009688'],
