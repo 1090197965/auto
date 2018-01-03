@@ -77,14 +77,14 @@
 				elem: '.layui-date',
 				type: 'datetime'
 			});
-		});
 
-		//提示信息
-		$('.i-tips').on('mouseover', function(){
-			var $this = $(this);
-			layer.tips($this.attr('i-message'), '.'+$this.attr('i-tips-class'), {
-				tips: [1, '#009688'],
-				time: 3000
+			//提示信息
+			$('.i-tips').on('mouseover', function(){
+				var $this = $(this);
+				layer.tips($this.attr('i-message'), '.'+$this.attr('i-tips-class'), {
+					tips: [1, '#009688'],
+					time: 3000
+				});
 			});
 		});
 	</script>
