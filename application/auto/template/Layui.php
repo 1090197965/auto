@@ -187,6 +187,12 @@ class Layui extends Base implements ITemplate{
 			$alert.iframe("'.$title.'", "' . $url . '?id="+data.id)
 		';
 	}
+	public function getJSOpenItemGetIframe($url, $get, $title) {
+		return '
+			$alert.iframe("'.$title.'", "' . $url . '?'.$get.')
+		';
+	}
+
 	//生成js代码--------------------------------------------
 
 	//显示的按钮---------------------------------------------

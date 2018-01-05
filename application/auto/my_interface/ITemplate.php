@@ -79,6 +79,17 @@ interface ITemplate {
 	 * @return mixed
 	 */
 	public function getJSOpenItemIdIframe($url, $title);
+
+	/**
+	 * 行工具使用, 只能用于行按钮
+	 *
+	 * @param $url
+	 * @param $get string 可以自己设定get值, 输入格式为: "id=data.id&name=data.name", data为含有参数的对象
+	 * @param $title
+	 *
+	 * @return mixed
+	 */
+	public function getJSOpenItemGetIframe($url, $get, $title);
 	//生成js代码--------------------------------------------
 
 	//显示的按钮---------------------------------
