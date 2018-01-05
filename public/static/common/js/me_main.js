@@ -16,6 +16,8 @@
 			if(typeof value == 'object'){
 				type = value.type;
 				value = value.message;
+				if(type == 'success')
+					call = getType(call, function(){});
 
 			}else{
 				type = getType(type, 'info');
