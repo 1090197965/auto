@@ -131,28 +131,61 @@
 				return inputValue;
 			});
 		},
+		is		: function(title, message, call, url){
+			swal({
+					title: title,
+					text: message,
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "确定",
+					cancelButtonText: "取消",
+					showLoaderOnConfirm	: true,
+					closeOnConfirm: false,
+					closeOnCancel: true
+				},
+				function(isConfirm){
+					if (isConfirm) {
+						call();
+					}
+				});
+		},
 		delete	: function(message, url, call){
 			message = getType(message, '删除后将无法恢复!');
+			var deleteHandle = function(){
+				$.get(url, function(data){
+					$alert.auto(data, call);
+				}, 'json');
+			};
+			$alert.is('确定要删除吗?', message, deleteHandle, url);
+			//swal({
+			//	title: "确定删除吗？",
+			//	text: message,
+			//	type: "warning",
+			//	showCancelButton: true,
+			//	confirmButtonColor: "#DD6B55",
+			//	confirmButtonText: "确定",
+			//	cancelButtonText: "取消",
+			//	showLoaderOnConfirm	: true,
+			//	closeOnConfirm: false,
+			//	closeOnCancel: false
+			//},
+			//function(isConfirm){
+			//	if (isConfirm) {
+			//		$.get(url, function(data){
+			//			$alert.auto(data, call);
+			//		}, 'json');
+			//	}else{
+			//		$alert.error("操作已取消!", "取消！");
+			//	}
+			//});
+		},
+		html 	: function(html, title){
 			swal({
-				title: "确定删除吗？",
-				text: message,
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "确定",
-				cancelButtonText: "取消",
-				showLoaderOnConfirm	: true,
-				closeOnConfirm: false,
-				closeOnCancel: false
-			},
-			function(isConfirm){
-				if (isConfirm) {
-					$.get(url, function(data){
-						$alert.auto(data, call);
-					}, 'json');
-				}else{
-					$alert.error("操作已取消!", "取消！");
-				}
+				title: title,
+				text:  html,
+				html: true,
+				allowOutsideClick		: true,
 			});
 		},
 		message	: function(type, message){
