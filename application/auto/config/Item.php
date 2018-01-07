@@ -159,6 +159,14 @@ class Item {
 					$remark = '唯一标识符';
 					break;
 
+				case 'uid':
+					$width = 60;
+					$type = Item::INT;
+					$title = '用户编号';
+					$isSearch = true;
+					$remark = '用户唯一标识符';
+					break;
+
 				case 'status':
 					$type = Item::SW;
 					$title = '状态';
