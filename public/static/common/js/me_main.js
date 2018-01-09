@@ -12,16 +12,20 @@
 
 	//弹窗
 	var $alert = {
-		_type : function(value, title, type, call){
+		_type : function(value, title, type, call, errorCall){
 			if(typeof value == 'object'){
 				type = value.type;
 				value = value.message;
 				if(type == 'success')
-					call = getType(call, function(){});
+					call = call;
+				else if(type == 'error')
+					call = errorCall;
+				else{
+					call = undefined;
+				}
 
 			}else{
 				type = getType(type, 'info');
-				call = getType(call, function(){});
 			}
 
 			var config = {
@@ -59,8 +63,8 @@
 					config['type'] = type;
 
 					//因为时间类型不能有回调, 所以这里单独调用
-					swal(config);
-					return true;
+					//swal(config);
+					//return true;
 					break;
 
 				default :
@@ -69,13 +73,19 @@
 					break;
 			}
 
-			swal(config, call);
+			if(typeof call == 'undefined'){
+				swal(config);
+
+			}else{
+				swal(config, call);
+
+			}
 		},
 		info	: function(value, title, call){
 			this._type(value, title, 'info', call);
 		},
-		auto	: function(value, call){
-			this._type(value, undefined, undefined, call);
+		auto	: function(value, sucessCall, errorCall){
+			this._type(value, undefined, undefined, sucessCall, errorCall);
 		},
 		error	: function(value, title){
 			this._type(value, title, 'error');
