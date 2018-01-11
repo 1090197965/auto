@@ -158,12 +158,31 @@ class Handle implements IHandle {
 
 	public function editSave(array $data){
 		$this->error = '保存失败';
-		if($this->editOrSave() == Handle::SAVE){
-			$result = $this->_db->saveForm($data);
+
+		//保存前的事件
+		$isGoOn = true;
+		if($this->_config->issetOn(Config::EVENT_BEFORE)){
+			$isGoOn = $this->_config->onBefore($data, $this->editOrSave(), $this);
+		}
+
+		if($isGoOn){
+			if($this->editOrSave() == Handle::SAVE){
+				$result = $this->_db->saveForm($data);
+			}else{
+				$result = $this->_db->addForm($data);
+			}
+
+			//保存后的事件
+			if($result){
+				if($this->_config->issetOn(Config::EVENT_AFTER)){
+					$result = $this->_config->onAfter($data, $this->editOrSave(), $this);
+				}
+			}
 
 			return $result;
+
 		}else{
-			return $this->_db->addForm($data);
+			return false;
 		}
 	}
 

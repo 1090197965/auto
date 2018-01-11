@@ -201,7 +201,7 @@ interface IConfig {
 	public function onSearch();
 
 	/**
-	 * 保存后的操作
+	 * 一切操作结束后的操作
 	 * @return mixed
 	 */
 	public function onEnd();
@@ -211,6 +211,18 @@ interface IConfig {
 	 * @return mixed
 	 */
 	public function onShow();
+
+	/**
+	 * 保存之前的操作
+	 * @return mixed
+	 */
+	public function onBefore();
+
+	/**
+	 * 保存之后的操作
+	 * @return mixed
+	 */
+	public function onAfter();
 
 	/**
 	 * 这里是提取表单后, 获取表单数据的事件
