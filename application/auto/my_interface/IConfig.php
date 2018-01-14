@@ -211,7 +211,7 @@ interface IConfig {
 	public function onSearch();
 
 	/**
-	 * 一切操作结束后的操作
+	 * 保存操作结束后的操作
 	 * @return mixed
 	 */
 	public function onEnd();
