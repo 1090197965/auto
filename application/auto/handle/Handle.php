@@ -175,6 +175,10 @@ class Handle implements IHandle {
 				if($this->_config->issetOn(IConfig::EVENT_AFTER)){
 					$result = $this->_config->onAfter($data, $this->editOrSave(), $this);
 				}
+
+				if($this->_config->issetOn(IConfig::EVENT_END)){
+					$this->_config->onEnd();
+				}
 			}
 
 			return $result;
