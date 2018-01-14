@@ -165,6 +165,16 @@ interface IConfig {
 	//-----------------------------------------
 
 	//事件--------------------------------------
+	//QP:TODO: 添加事件 这里也需要添加, 需要EVENT开头
+	const EVENT_EDIT = 'Edit';
+	const EVENT_CHECK_SAVE = 'CheckSave';
+	const EVENT_SEARCH = 'Search';
+	const EVENT_END = 'End';
+	const EVENT_SHOW = 'Show';
+	const EVENT_GET_FORM_LAST = 'GetFormLast';
+	const EVENT_BEFORE = 'Before';
+	const EVENT_AFTER = 'After';
+
 	/**
 	 * 绑定事件
 	 *

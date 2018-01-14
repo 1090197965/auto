@@ -27,4 +27,19 @@ class Base extends Model {
 
 		return self::where($where)->column($value, $key);
 	}
+
+	/**
+	 * 获得指定id的某个值, 为空返回null
+	 * @param $id
+	 * @param $name
+	 *
+	 * @return mixed|null
+	 */
+	public static function getField($id, $name){
+		$data = self::get($id);
+		if(empty($data))
+			return null;
+		else
+			return $data->$name;
+	}
 }

@@ -15,8 +15,6 @@ use app\auto\my_interface\IHandle;
 use think\Validate;
 
 class Handle implements IHandle {
-	const SAVE = 'save';
-	const ADD = 'add';
 
 	/**
 	 * @var IDataBase
@@ -50,9 +48,9 @@ class Handle implements IHandle {
 		$getId = input('get.'.$idName, null);
 		$postId = input('post.'.$idName, null);
 		if(empty($getId) and empty($postId))
-			return self::ADD;
+			return IHandle::ADD;
 		else{
-			return self::SAVE;
+			return IHandle::SAVE;
 		}
 	}
 
@@ -105,7 +103,7 @@ class Handle implements IHandle {
 			}
 
 			//自定义检查错误
-			if($this->_config->issetOn(Config::EVENT_CHECK_SAVE)){
+			if($this->_config->issetOn(IConfig::EVENT_CHECK_SAVE)){
 				$result = $this->_config->onCheckSave($data, $this->editOrSave(), $this);
 				return $result;
 
@@ -149,7 +147,7 @@ class Handle implements IHandle {
 		}
 
 		//获取表单数据后事件
-		if($this->_config->issetOn(Config::EVENT_GET_FORM_LAST)){
+		if($this->_config->issetOn(IConfig::EVENT_GET_FORM_LAST)){
 			$newData = $this->_config->onGetFormLast($newData);
 		}
 
@@ -161,12 +159,12 @@ class Handle implements IHandle {
 
 		//保存前的事件
 		$isGoOn = true;
-		if($this->_config->issetOn(Config::EVENT_BEFORE)){
+		if($this->_config->issetOn(IConfig::EVENT_BEFORE)){
 			$isGoOn = $this->_config->onBefore($data, $this->editOrSave(), $this);
 		}
 
 		if($isGoOn){
-			if($this->editOrSave() == Handle::SAVE){
+			if($this->editOrSave() == IHandle::SAVE){
 				$result = $this->_db->saveForm($data);
 			}else{
 				$result = $this->_db->addForm($data);
@@ -174,7 +172,7 @@ class Handle implements IHandle {
 
 			//保存后的事件
 			if($result){
-				if($this->_config->issetOn(Config::EVENT_AFTER)){
+				if($this->_config->issetOn(IConfig::EVENT_AFTER)){
 					$result = $this->_config->onAfter($data, $this->editOrSave(), $this);
 				}
 			}

@@ -8,6 +8,9 @@
 
 namespace app\auto\my_interface;
 interface IHandle {
+	const SAVE = 'save';
+	const ADD = 'add';
+
 	/**
 	 * 注入数据库类
 	 * @param IDataBase $db

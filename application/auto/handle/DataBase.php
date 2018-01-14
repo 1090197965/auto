@@ -60,6 +60,7 @@ class DataBase implements IDataBase{
 			//搜索栏筛选
 			->where(function($q)use($get){
 				foreach ($get as $key => $value){
+					//QP:TODO: 这里, 如果恰好数据库有page或者limit这两个字段会导致数据出错, 需要注意
 					//设置中含有的字段信息
 					$fieldList = $this->_config->getField()->getListName();
 					if($value !== '' and in_array($key, $fieldList)){
@@ -96,7 +97,7 @@ class DataBase implements IDataBase{
 					}
 				}
 
-				if($this->_config->issetOn(Config::EVENT_SEARCH)){
+				if($this->_config->issetOn(IConfig::EVENT_SEARCH)){
 					$this->_config->onSearch($get, $q);
 				}
 			})
@@ -105,7 +106,7 @@ class DataBase implements IDataBase{
 		//显示事件处理
 		if($data instanceof Paginator){
 			$data->each(function($item){
-				if($this->_config->issetOn(Config::EVENT_SHOW)){
+				if($this->_config->issetOn(IConfig::EVENT_SHOW)){
 					$newItem = $this->_config->onShow($item);
 					if(!empty($newItem))
 						return $newItem;
