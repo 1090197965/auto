@@ -1,5 +1,9 @@
 <extend name="auto@base"/>
 
+<block name="head">
+	<include file='auto@switch/edit/css' />
+</block>
+
 <block name="body">
 	<div class="wrapper-content gray-bg">
 		<div class="row wrapper white-bg">
@@ -29,6 +33,7 @@
 </block>
 
 <block name="foot">
+	<include file='auto@switch/edit/js' />
 	<script>
 		layui.use(['form', 'layedit', 'laydate'], function(){
 			var form = layui.form

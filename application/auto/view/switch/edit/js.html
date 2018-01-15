@@ -1,0 +1,16 @@
+<foreach name="editShow" item="value" key="key">
+	<php>$value = $field[$value];</php>
+	<php>$type = $value->type;</php>
+	<present name="$info">
+		<!--如果是编辑则使用保存的值, 否则使用默认值-->
+		<php>$atValue = $info[$value->name];</php>
+		<else/>
+		<php>$atValue = $value->default;</php>
+	</present>
+
+	<switch name="$type">
+		<case value=":$Item::CONTENT">
+			<include file='common@public/input/editor_js' name="{$atName}" />
+		</case>
+	</switch>
+</foreach>
