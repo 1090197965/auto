@@ -15,6 +15,13 @@ use app\common\controller\Base;
 use think\Db;
 use think\Validate;
 
+//QP:TODO: 设置视图功能, 用来显示关联的表
+//QP:TODO: 那这样应该有视图的字段, 应该区分开, 可以搜索, 但是不能添加和编辑
+//QP:TODO: 设置只显示没有数据库相关的单元格
+//QP:TODO: 添加页面尝试用include功能来自定义表单
+//QP:TODO: 自定义搜索
+//QP:TODO: 添加可以批量编辑的字段
+//QP:TODO: 自定义的单元格样式, 是指除了定义的类型外的自定义单元格
 abstract class AbstractAuto extends Base implements IAuto
 {
 	/**
