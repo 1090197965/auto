@@ -40,7 +40,7 @@
 					</notempty>
 				</label>
 				<div class="layui-input-inline">
-					<include file='auto@format/select' item="value" value="atValue" verify="{$verify}"/>
+					<include file='auto@format/sw' item="value" value="atValue" verify="{$verify}"/>
 				</div>
 			</div>
 		</case>
@@ -83,7 +83,14 @@
 					</notempty>
 				</label>
 				<div class="layui-input-inline">
-					<include file='auto@format/select' item="value" value="atValue"  verify="{$verify}"/>
+					<php>$option = $value->option;</php>
+					<if condition="count($option) < 4">
+						<foreach name="option" item="optionValue" key="key">
+							<input type="radio" name="{$value->name}" value="{$key}" title="{$optionValue}" checked="">
+						</foreach>
+					<else />
+						<include file='auto@format/select' item="value" value="atValue"  verify="{$verify}"/>
+					</if>
 				</div>
 			</div>
 		</case>
