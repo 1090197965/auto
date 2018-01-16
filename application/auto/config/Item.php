@@ -39,10 +39,6 @@ namespace app\auto\config;
  */
 class Item {
 	//QP:TODO: 添加配置 添加变量后, 还需去get方法中设置形参以及常量, 并且要在主注释中加入method和property用来代码提示
-	/**
-	 * @var 类型
-	 */
-	protected $type;
 
 	/**
 	 * 特殊显示的单元格
@@ -74,6 +70,10 @@ class Item {
 	const IMAGES = 10;
 	const SW = 12;	//这个是开关, 只有两种状态, 如果是这个类型, 则option只能为两个长度的数组, 并且不能设置key
 
+	/**
+	 * @var 类型
+	 */
+	protected $type;
 	/**
 	 * @var 字段名
 	 */
