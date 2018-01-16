@@ -171,6 +171,7 @@ class Item {
 					$type = Item::SW;
 					$title = '状态';
 					$isSearch = true;
+					$width = 70;
 					break;
 
 				case 'add_time':
