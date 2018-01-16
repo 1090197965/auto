@@ -40,7 +40,11 @@
 					</notempty>
 				</label>
 				<div class="layui-input-inline">
-					<include file='auto@format/sw' item="value" value="atValue" verify="{$verify}"/>
+					<if condition="'[type]' == 'batch'">
+						<include file='auto@format/select' item="value" value="atValue" verify="{$verify}"/>
+					<else />
+						<include file='auto@format/sw' item="value" value="atValue" verify="{$verify}"/>
+					</if>
 				</div>
 			</div>
 		</case>
