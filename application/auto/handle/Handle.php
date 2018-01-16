@@ -119,9 +119,11 @@ class Handle implements IHandle {
 
 		//这里原本是便利配置的字段, 但是考虑到一些原因, 还是直接遍历提交来的字段把
 		$field = $this->_config->getField()->getList();
-//		foreach ($this->_config->getField()->getList() as $item) {
-		foreach ($data as $name => $item) {
-			$item = $field[$name];
+//		foreach ($this->_config->getField()->getList() as $item) {]
+		//原本遍历的是提交来表单的data, 不过考虑到有可能丢失一部分字段, 所以还是便利显示的字段
+//		foreach ($data as $name => $item) {
+		foreach ($this->_config->getFieldEditShow() as $item) {
+			$item = $field[$item];
 
 			if($item instanceof Item){
 				if(isset($data[$item->name]) and $data[$item->name] !== '')
