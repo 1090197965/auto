@@ -237,9 +237,21 @@
 				content: url
 			});
 		},
-		close: function(){
+		close: function(data){
+			data = getType(data, {result:true});
+
+			//注意：parent 是 JS 自带的全局对象，可用于操作父页面
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			parent.layer.close(index);	//关闭窗口
+
+			if(data.result){
+				parent.$alert.message(true, '操作成功');
+				//刷新列表页面
+				parent.$('#layer-reload').change();
+				parent.layer.close(index);	//关闭窗口
+
+			}else{
+				parent.layer.msg(data.message, {shade: 0.3,shadeClose :true}); //提示信息
+			}
 		}
 	};
 
