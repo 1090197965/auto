@@ -58,7 +58,7 @@ interface ITemplate {
 	 *
 	 * @return mixed
 	 */
-	public function getJSOpenIframe($url, $title);
+	public function getJSOpenIframe($url, $title, $size = '');
 
 	/**
 	 * 根据url生成检查选中, 并且弹窗的代码
@@ -68,7 +68,7 @@ interface ITemplate {
 	 *
 	 * @return mixed
 	 */
-	public function getJSOpenCheckboxIframe($url, $title);
+	public function getJSOpenCheckboxIframe($url, $title, $size = '');
 
 	/**
 	 * 行工具使用, 只能用于行按钮
@@ -78,7 +78,7 @@ interface ITemplate {
 	 *
 	 * @return mixed
 	 */
-	public function getJSOpenItemIdIframe($url, $title);
+	public function getJSOpenItemIdIframe($url, $title, $size = '');
 
 	/**
 	 * 行工具使用, 只能用于行按钮
@@ -89,7 +89,7 @@ interface ITemplate {
 	 *
 	 * @return mixed
 	 */
-	public function getJSOpenItemGetIframe($url, $get, $title);
+	public function getJSOpenItemGetIframe($url, $get, $title, $size = '');
 	//生成js代码--------------------------------------------
 
 	//显示的按钮---------------------------------

@@ -170,27 +170,39 @@ class Layui extends Base implements ITemplate{
 	}
 
 	//生成js代码--------------------------------------------
-	public function getJSOpenIframe($url, $title){
+	public function getJSOpenIframe($url, $title, $size = ''){
 		return '
-			$alert.iframe("'.$title.'", "' . $url . '")
+			$alert.iframe("'.$title.'", "' . $url . '", '.$this->createSizeJs($size).')
 		';
 	}
-	public function getJSOpenCheckboxIframe($url, $title){
+	public function getJSOpenCheckboxIframe($url, $title, $size = ''){
 		return '
 			openIdList(function(idList){
-				$alert.iframe("'.$title.'", "' . $url . '?id="+idList);
+				$alert.iframe("'.$title.'", "' . $url . '?id="+idList, '.$this->createSizeJs($size).');
 			})
 		';
 	}
-	public function getJSOpenItemIdIframe($url, $title) {
+	public function getJSOpenItemIdIframe($url, $title, $size = '') {
 		return '
-			$alert.iframe("'.$title.'", "' . $url . '?id="+data.id)
+			$alert.iframe("'.$title.'", "' . $url . '?id="+data.id, '.$this->createSizeJs($size).')
 		';
 	}
-	public function getJSOpenItemGetIframe($url, $get, $title) {
+	public function getJSOpenItemGetIframe($url, $get, $title, $size = '') {
 		return '
-			$alert.iframe("'.$title.'", "' . $url . '?'.$get.')
+			$alert.iframe("'.$title.'", "' . $url . '?'.$get.', '.$this->createSizeJs($size).')
 		';
+	}
+	private function createSizeJs($size){
+		if(empty($size))
+			return 'undefined';
+
+		if(count($size) != 2)
+			exception('大小的格式只能是两个长度的数组, 例如[100px, 200px] 或者 [100%, 50%]');
+
+		$c = reset($size);
+		$k = next($size);
+
+		return "['$c', '$k']";
 	}
 
 	//生成js代码--------------------------------------------
