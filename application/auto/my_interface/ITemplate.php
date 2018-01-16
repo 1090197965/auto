@@ -154,4 +154,27 @@ interface ITemplate {
 	 */
 	public function removeIndexItemTool($name);
 	//显示的按钮---------------------------------
+
+	//html模块----------------------------------
+
+	/**
+	 * 添加自定义的模块
+	 * @param      $title
+	 * @param      $widget
+	 * @param null $widgetArgs
+	 *
+	 * @return mixed
+	 */
+	public function addWidget($title, $widget, $widgetArgs = null);
+	public function getWidget();
+
+	/**
+	 * 添加统计数据
+	 * @param $title string 标题
+	 * @param $statArr array 数据, 格式为 名称 => 值
+	 *
+	 * @return mixed
+	 */
+	public function addStat($title, array $statArr);
+	public function getStat();
 }

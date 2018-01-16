@@ -75,6 +75,8 @@ class Layui extends Base implements ITemplate{
 		$this->view->col = json_encode($this->getTableColInfo());
 		$this->view->tool = $this->getIndexTool();
 		$this->view->itemTool = $this->getIndexItemTool();
+		$this->view->widget = $this->getWidget();
+		$this->view->stat = $this->getStat();
 
 		return $this->fetch('auto@index/index', [], $this->replace_str, $this->templateConfig);
 	}
@@ -248,4 +250,24 @@ class Layui extends Base implements ITemplate{
 		return $this->indexItemTool;
 	}
 	//显示的按钮---------------------------------------------
+
+	//自定义html模块-----------------------------------------
+	private $_widget = [];
+	public function addWidget($title, $widget, $widgetArgs = null) {
+		$this->_widget[$title] = ['widget'=>$widget, 'args'=>$widgetArgs];
+	}
+
+	public function getWidget() {
+		return $this->_widget;
+	}
+
+	private $_stat = [];
+	public function addStat($title, array $statArr) {
+		$this->_stat[$title] = $statArr;
+	}
+
+	public function getStat() {
+		return $this->_stat;
+	}
+	//自定义html模块-----------------------------------------
 }
