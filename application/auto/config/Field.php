@@ -110,4 +110,53 @@ class Field{
 	public function getListName(){
 		return $this->listName;
 	}
+
+	public static function switchSearch($q, $item, $value){
+		switch($item->type){
+			//这四种类型直接获取搜索
+			case Item::ID:
+			case Item::INT:
+			case Item::SELECT:
+			case Item::SW:
+				$q->where($item->name, $value);
+				break;
+
+			//字符串类型都采用模糊搜索的方式
+			case Item::STRING:
+			case Item::DESCRIPTION:
+			case Item::CONTENT:
+				$q->where($item->name, 'like', "%$value%");
+				break;
+
+			//时间都是范围选择
+			case Item::TIME:
+				list($start, $end) = explode('~', $value);
+				$start = strtotime($start);
+				$end = strtotime($end);
+				$q->where($item->name, 'between', [$start, $end]);
+				break;
+
+			//用来防止没有筛选的时候where为空的报错
+			default:
+				$q->where(null);
+				break;
+		}
+	}
+
+	public static function switchGetForm($item, $value){
+		switch($item->type){
+			case Item::TIME:
+				$value = strtotime($value)?:null;
+				break;
+
+			case Item::SW:
+				$value = !empty($value) ? 1 : 0;
+				break;
+
+			default:
+				break;
+		}
+
+		return $value;
+	}
 }

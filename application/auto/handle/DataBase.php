@@ -65,35 +65,7 @@ class DataBase implements IDataBase{
 					$fieldList = $this->_config->getField()->getListName();
 					if($value !== '' and in_array($key, $fieldList)){
 						//获得常量值
-						switch($this->_config->getField()->getList($key)->type){
-							//这四种类型直接获取搜索
-							case Item::ID:
-							case Item::INT:
-							case Item::SELECT:
-							case Item::SW:
-								$q->where($key, $value);
-								break;
-
-							//字符串类型都采用模糊搜索的方式
-							case Item::STRING:
-							case Item::DESCRIPTION:
-							case Item::CONTENT:
-								$q->where($key, 'like', "%$value%");
-								break;
-
-							//时间都是范围选择
-							case Item::TIME:
-								list($start, $end) = explode('~', $value);
-								$start = strtotime($start);
-								$end = strtotime($end);
-								$q->where($key, 'between', [$start, $end]);
-								break;
-
-							//用来防止没有筛选的时候where为空的报错
-							default:
-								$q->where(null);
-								break;
-						}
+						Field::switchSearch($q, $this->_config->getField()->getList($key), $value);
 					}
 				}
 

@@ -8,6 +8,7 @@
 namespace app\auto\handle;
 
 use app\auto\config\Config;
+use app\auto\config\Field;
 use app\auto\config\Item;
 use app\auto\my_interface\IConfig;
 use app\auto\my_interface\IDataBase;
@@ -129,18 +130,7 @@ class Handle implements IHandle {
 					$value = $item->default;
 				}
 
-				switch($item->type){
-					case Item::TIME:
-						$value = strtotime($value)?:null;
-						break;
-
-					case Item::SW:
-						$value = !empty($value) ? 1 : 0;
-						break;
-					
-					default:
-						break;
-				}
+				$value = Field::switchGetForm($item, $value);
 
 				$newData[$item->name] = $value;
 			}
