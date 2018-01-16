@@ -109,11 +109,11 @@ abstract class AbstractAuto extends Base implements IAuto
 			);
 
 		//行编辑
-		$this->_template->addIndexItemTool(ITemplate::TOOL_ITEM_EDIT, '编辑',
+		$this->_template->addIndexItemTool(ITemplate::TOOL_ITEM_EDIT, '',
 			$this->_template->getJSOpenItemIdIframe($c->getUrlEditName(), '编辑')
 			, '&#xe642;');
 		//行删除
-		$this->_template->addIndexItemTool(ITemplate::TOOL_ITEM_DETETE, '删除', '
+		$this->_template->addIndexItemTool(ITemplate::TOOL_ITEM_DETETE, '', '
 			$alert.delete("确认删除编号为: "+data.id+" 的数据吗? ", "'.$c->getHandleDeleteId().'?id="+data.id, function(){
 				tableReload();
 			});
