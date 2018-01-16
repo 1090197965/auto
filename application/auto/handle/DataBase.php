@@ -101,6 +101,7 @@ class DataBase implements IDataBase{
 					$this->_config->onSearch($get, $q);
 				}
 			})
+			->order($this->_config->getOrder())
 			->paginate($limit);
 
 		//显示事件处理
