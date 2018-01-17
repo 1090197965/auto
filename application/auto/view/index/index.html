@@ -7,6 +7,15 @@
 			line-height: 34px;
 			margin-bottom: 0.5rem;
 		}
+
+
+		body > div {
+			margin-left: 1%;
+		}
+
+		input {
+			padding-right: 0!important;
+		}
 	</style>
 </block>
 
@@ -88,8 +97,8 @@
 	</div>
 
 	<foreach name="widget" item="value" key="key">
-		<br>
-		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px">
+		<div class="layui-clear"></div>
+		<fieldset class="layui-elem-field layui-field-title">
 			<legend>{$key}</legend>
 		</fieldset>
 		{:widget($value.widget, $value.args)}
@@ -97,13 +106,23 @@
 	
 	
 	<foreach name="stat" item="value" key="key">
-		<br>
-		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px">
+		<div class="layui-clear"></div>
+		<fieldset class="layui-elem-field layui-field-title">
 			<legend>{$key}</legend>
 		</fieldset>
-		<foreach name="value" item="sValue" key="sKey">
-		    <div>{$sValue} => {$sKey}</div>
-		</foreach>
+		<div class="layui-row">
+			<foreach name="value" item="sValue" key="sKey">
+				<div class="layui-inline layui-col-xs12 layui-col-md6">
+					<label class="layui-form-label">
+						{$sKey} :
+					</label>
+					<label class="layui-form-label">
+						{$sValue}
+					</label>
+				</div>
+			</foreach>
+		</div>
+
 	</foreach>
 </block>
 
