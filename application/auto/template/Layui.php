@@ -159,10 +159,13 @@ class Layui extends Base implements ITemplate{
 			}
 		}
 
-		$info[] = [
-			'toolbar'	=> '#barDemo',
-			'title'		=> '工具'
-		];
+		//工具栏
+		if(!empty($this->getIndexItemTool())){
+			$info[] = [
+				'toolbar'	=> '#barDemo',
+				'title'		=> '工具'
+			];
+		}
 
 		return $info;
 	}
