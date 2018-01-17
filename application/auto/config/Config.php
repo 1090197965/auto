@@ -30,6 +30,7 @@ class Config implements IConfig{
 	private $fieldEditShow = null;
 	private $fieldBatch = null;
 	private $notEdit = null;
+	private $notDelete = null;
 
 	public function setNotEdit() {
 		$this->notEdit = true;
@@ -40,6 +41,17 @@ class Config implements IConfig{
 			exception('当前页面不可访问, 请取消设置NotEdit后在尝试');
 		}
 	}
+
+	public function setNotDelete() {
+		$this->notDelete = true;
+	}
+
+	public function checkNotDelete() {
+		if($this->notDelete){
+			exception('不可使用删除功能, 请取消设置NotDelete后在尝试');
+		}
+	}
+
 	public function getOrder() {
 		return $this->order;
 	}

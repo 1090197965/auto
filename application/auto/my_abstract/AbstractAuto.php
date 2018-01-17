@@ -162,6 +162,7 @@ abstract class AbstractAuto extends Base implements IAuto
 	public function edit(){
 		//检测当前页面是否可以编辑
 		$this->_config->checkNotEdit();
+
 		return $this->_template->vEdit();
 	}
 
@@ -250,6 +251,9 @@ abstract class AbstractAuto extends Base implements IAuto
 	 * 返回的参数 : 标准ajax返回
 	 */
 	public function deleteIdHandle(){
+		//检查是否可以删除
+		$this->_config->checkNotDelete();
+
 		$id = input('get.id');
 		$this->message($this->_handle->deleteId($id), '删除成功!', $this->_handle->getError());
 	}

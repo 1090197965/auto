@@ -27,6 +27,13 @@ interface IConfig {
 	public function checkNotEdit();
 
 	/**
+	 * 设置不能删除功能
+	 * @return mixed
+	 */
+	public function setNotDelete();
+	public function checkNotDelete();
+
+	/**
 	 * 如果是多表关联, 则可以设置
 	 * @param $join
 	 *
