@@ -29,7 +29,17 @@ class Config implements IConfig{
 	private $fieldIndexShow = null;
 	private $fieldEditShow = null;
 	private $fieldBatch = null;
+	private $notEdit = null;
 
+	public function setNotEdit() {
+		$this->notEdit = true;
+	}
+
+	public function checkNotEdit() {
+		if($this->notEdit){
+			exception('当前页面不可访问, 请取消设置NotEdit后在尝试');
+		}
+	}
 	public function getOrder() {
 		return $this->order;
 	}
@@ -121,7 +131,10 @@ class Config implements IConfig{
 	public function setFieldBatch(array $fieldBatch) {
 		$this->fieldBatch = $fieldBatch;
 	}
-
+	public function checkFieldBatch() {
+		if(empty($this->getFieldBatch()))
+			exception('不可使用批量编辑功能');
+	}
 	/**
 	 * @return null
 	 */

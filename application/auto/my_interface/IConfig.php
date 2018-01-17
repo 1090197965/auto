@@ -20,6 +20,13 @@ interface IConfig {
 	public function setTableName($tableName);
 
 	/**
+	 * 设置不能使用编辑功能
+	 * @return mixed
+	 */
+	public function setNotEdit();
+	public function checkNotEdit();
+
+	/**
 	 * 如果是多表关联, 则可以设置
 	 * @param $join
 	 *
@@ -94,6 +101,12 @@ interface IConfig {
 	 * @return mixed
 	 */
 	public function setFieldBatch(array $fieldBatch);
+
+	/**
+	 * 检查是否可以使用批量编辑
+	 * @return mixed
+	 */
+	public function checkFieldBatch();
 
 	//以下是页面跳转url的设置接口------------------
 	/**

@@ -160,6 +160,8 @@ abstract class AbstractAuto extends Base implements IAuto
 	 * @return mixed
 	 */
 	public function edit(){
+		//检测当前页面是否可以编辑
+		$this->_config->checkNotEdit();
 		return $this->_template->vEdit();
 	}
 
@@ -167,6 +169,9 @@ abstract class AbstractAuto extends Base implements IAuto
 	 * 批量处理页面
 	 */
 	public function editBatch(){
+		//检查是否可以使用批量编辑
+		$this->_config->checkFieldBatch();
+
 		return $this->_template->vEditBatch();
 	}
 
@@ -175,6 +180,9 @@ abstract class AbstractAuto extends Base implements IAuto
 	 * 接受类型: post
 	 */
 	public function editHandle(){
+		//检测当前页面是否可以编辑
+		$this->_config->checkNotEdit();
+
 		$data = input('post.');
 		if($this->_handle->validate($data)){
 			$data = $this->_handle->getForm($data);
@@ -189,6 +197,9 @@ abstract class AbstractAuto extends Base implements IAuto
 	 * 批量处理操作
 	 */
 	public function editBatchHandle(){
+		//检查是否可以使用批量编辑
+		$this->_config->checkFieldBatch();
+
 		$idName = $this->_config->getField()->getIdName();
 		$data = input('post.');
 		//取出需要修改的主键
