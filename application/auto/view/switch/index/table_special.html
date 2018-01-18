@@ -24,7 +24,11 @@
 
 			<case value=":$Item::TIME">
 				<!--时间单元格-->
-				{{new Date(d.{$value->name}*1000).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ").replace(/上午|下午/, "")}}
+				{{#  if(d.{$value->name} == null){ }}
+					无
+				{{#  } else { }}
+					{{new Date(d.{$value->name}*1000).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ").replace(/上午|下午/, "")}}
+				{{#  } }}
 			</case>
 		</switch>
 	</script>
