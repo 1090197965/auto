@@ -90,7 +90,7 @@
 					<php>$option = $value->option;</php>
 					<if condition="count($option) < 4">
 						<foreach name="option" item="optionValue" key="key">
-							<input type="radio" name="{$value->name}" title="{$optionValue}" {$key==$atValue?'checked':''}>
+							<input type="radio" name="{$value->name}" title="{$optionValue}" {$key==$atValue?'checked':''} value="{$key}">
 						</foreach>
 					<else />
 						<include file='auto@format/select' item="value" value="atValue"  verify="{$verify}"/>
