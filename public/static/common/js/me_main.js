@@ -225,9 +225,18 @@
 				class_name: 'gritter-success'//gritter-center
 			});
 		},
-		iframe: function(title, url, size){
+		iframe: function(title, url, size, $isNotParent){
+			//判断是否是iframe窗口
+			//如果是iframe中, 就在父类窗口打开iframe, 这样就可以避免iframe窗口越来越小
+			//如果有异常弹不出layer, 则把下面的trycatch注释掉, 这样应该就能调用了
+
+			//在顶级窗口摊开 如果有table无法刷新的bug, 就使用下面的tab栏目
+			var layer = parent.layer;
+			//在tab栏目中弹开
+			//var	layer = layui.layer;
+
 			size = getType(size, ['993px', '500px']);
-			layui.layer.open({
+			layer.open({
 				type: 2,
 				title: title,
 				shadeClose: true,
@@ -240,18 +249,23 @@
 		close: function(data){
 			data = getType(data, {result:true});
 
-			//注意：parent 是 JS 自带的全局对象，可用于操作父页面
-			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			//是否为顶级窗口
+			//if(parent.name == ''){
 
-			if(data.result){
-				parent.$alert.message(true, '操作成功');
-				//刷新列表页面
-				parent.$('#layer-reload').change();
-				parent.layer.close(index);	//关闭窗口
+			//}else{
+				//注意：parent 是 JS 自带的全局对象，可用于操作父页面
+				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 
-			}else{
-				parent.layer.msg(data.message, {shade: 0.3,shadeClose :true}); //提示信息
-			}
+				if(data.result){
+					parent.$alert.message(true, '操作成功');
+					//刷新列表页面
+					parent.$('#layer-reload').change();
+					parent.layer.close(index);	//关闭窗口
+
+				}else{
+					parent.layer.msg(data.message, {shade: 0.3,shadeClose :true}); //提示信息
+				}
+			//}
 		}
 	};
 
