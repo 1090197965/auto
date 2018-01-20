@@ -54,7 +54,9 @@ class DataBase implements IDataBase{
 		$c = $this->_config;
 		$data = $this->db
 			//设置显示的字段
-			->field($c->getFieldIndexShow())
+//			->field($c->getFieldIndexShow())
+			//原本是只是显示只显示的字段, 但是修改成所有字段都提出来, 有时候有些字段需要用show事件处理, 但是却不需要显示, 所以这样修改了
+			->field($c->getField()->getListName())
 			//默认筛选
 			->where($c->getWhere())
 			//搜索栏筛选
