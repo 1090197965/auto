@@ -83,11 +83,26 @@ class Handle implements IHandle {
 				//保存需要检测是否重复的字段
 				if($item->checkIsOnly())
 					$only[] = $item;
-				
+
 				if(!empty($t))
 					$rules[$item->name.'|'.$item->title] = join('|', $t);
 			}
 		}
+
+		//表单令牌
+//		if($this->editOrSave() == IHandle::ADD){
+//			if(empty($rules)){
+//				$showField = $this->_config->getFieldEditShow();
+//				$rules[next($showField)] = 'token';
+//
+//			}else{
+//				foreach ($rules as $key => $item) {
+//					$rules[$key] = $item . '|'. 'token';
+//					break;
+//				}
+//			}
+//		}
+
 		//先验证器验证
 		$validate = new Validate($rules);
 		if (!$validate->check($data)) {
