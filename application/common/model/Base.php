@@ -10,6 +10,8 @@ namespace app\common\model;
 use think\Model;
 
 class Base extends Model {
+	protected static $get = [];
+
 	/**
 	 * 用来当作下拉框的数据使用, 如果有status字段则自动设置status=1
 	 * 如果不需要自动设置status=1, 则$where = null即可
@@ -36,7 +38,14 @@ class Base extends Model {
 	 * @return mixed|null
 	 */
 	public static function getField($id, $name){
-		$data = self::get($id);
+		$get = self::$get;
+		if(isset($get[$id]))
+			$data = self::$get[$id];
+		else{
+			$data = self::get($id);
+			self::$get[$id] = $data;
+		}
+
 		if(empty($data))
 			return null;
 		else
