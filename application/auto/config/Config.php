@@ -343,6 +343,10 @@ class Config implements IConfig{
 		}
 		if(empty($this->fieldEditShow)){
 			exception('请用 setFieldEditShow 进行设置 编辑页显示字段');
+		}else{
+			if(!in_array($this->field->getIdName(), $this->fieldEditShow)){
+				exception('显示的字段中必须包含主键');
+			}
 		}
 	}
 }
