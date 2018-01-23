@@ -1,0 +1,210 @@
+<extend name="admin@base"/>
+
+<block name="head">
+	<link href="__PATH__/css/bootstrap.min.css" rel="stylesheet">
+	<link href="__PATH__/font-awesome/css/font-awesome.css" rel="stylesheet">
+	<link href="__PATH__/css/animate.min.css" rel="stylesheet">
+	<link href="__PATH__/css/style.css" rel="stylesheet">
+
+	<style>
+		body{
+			height: 100%;overflow: hidden;
+		}
+		.mini-navbar li.active > ul{
+
+		}
+	</style>
+</block>
+
+<block name="body">
+	<!--导航-->
+	<nav class="navbar-default navbar-static-side menu-father" role="navigation">
+		<div class="sidebar-collapse menu-list">
+			<ul class="nav metismenu" id="side-menu">
+				<li class="nav-header">
+					<div class="dropdown profile-element"> <span>
+                            <img alt="image" class="img-circle" src="__PATH__/img/profile_small.jpg" style="width:50px;"/>
+                             </span>
+						<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear">
+								<span class="block m-t-xs">
+									<strong class="font-bold">{$user.username}</strong>
+                             	</span>
+								<span class="text-muted text-xs block">
+									菜单 <b class="caret"></b>
+								</span>
+							</span>
+						</a>
+						<ul class="dropdown-menu animated fadeInRight m-t-xs">
+							<li><a href="javascript:;" onclick="$alert.iframe('个人信息', '{:url('index/user/info')}')">个人信息</a></li>
+							<li><a href="javascript:;" id="agent">邀请链接</a></li>
+							<li><a href="javascript:;" onclick="$alert.iframe('修改密码', '{:url('index/user/changePw')}')">修改密码</a></li>
+							<li class="divider"></li>
+							<li><a href="login.html"><include file='common@public/user/logout' /></a></li>
+						</ul>
+					</div>
+					<div class="logo-element">
+						QP
+					</div>
+				</li>
+
+				<foreach name="config" item="menuConfig" key="menuName">
+					<li>
+						<a class="<base:unuse value='$menuConfig.child'>J_menuItem</base:unuse>" href="{:url($menuConfig.url)}" data-index="0">
+							<i class="layui-icon">{$menuConfig.ico}</i>
+							<span class="nav-label">{$menuName}</span>
+							<base:isuse value="$menuConfig.child">
+								<span class="fa arrow"></span>
+							</base:isuse>
+						</a>
+
+						<base:isuse value="$menuConfig.child">
+							<ul class="nav nav-second-level">
+								<foreach name="$menuConfig.child" item="childValue" key="childKey">
+									<li>
+										<if condition="is_array($childValue)">
+											<a href="javascript:;">{$childKey}<span class="fa arrow"></span></a>
+											<ul class="nav nav-third-level">
+												<foreach name="$childValue" item="downValue" key="downKey">
+													<li><a class="J_menuItem" href="{:url($downValue)}">{$downKey}</a>
+													</li>
+												</foreach>
+											</ul>
+											<else />
+											<a class="J_menuItem" href="{:url($childValue)}">{$childKey}</a>
+										</if>
+									</li>
+								</foreach>
+							</ul>
+						</base:isuse>
+					</li>
+				</foreach>
+			</ul>
+		</div>
+	</nav>
+	<!--导航-->
+
+	<!--内容区-->
+	<div id="page-wrapper" class="gray-bg dashbard-1">
+		<!--头部-->
+		<div class="row border-bottom">
+			<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+				<div class="navbar-header">
+					<div class="row content-tabs">
+						<button class="roll-nav roll-left J_tabLeft navbar-minimalize" id="tab-set">
+							<i class="fa fa-bars"></i>
+						</button>
+						<button class="roll-nav roll-left J_tabLeft" style="left: 40px;"><i class="fa fa-backward"></i>
+						</button>
+						<nav class="page-tabs J_menuTabs">
+							<div class="page-tabs-content">
+								<a href="javascript:;" class="active J_menuTab" data-id="{$defaultUrl}">首页</a>
+							</div>
+						</nav>
+						<button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
+						</button>
+						<div class="btn-group roll-nav roll-right">
+							<button class="dropdown J_tabClose" data-toggle="dropdown">关闭操作<span class="caret"></span>
+							</button>
+							<ul role="menu" class="dropdown-menu dropdown-menu-right">
+								<li class="J_tabShowActive"><a>定位当前选项卡</a>
+								</li>
+								<li class="divider"></li>
+								<li class="J_tabCloseAll"><a>关闭全部选项卡</a>
+								</li>
+								<li class="J_tabCloseOther"><a>关闭其他选项卡</a>
+								</li>
+							</ul>
+						</div>
+						<a href="login.html" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
+					</div>
+				</div>
+			</nav>
+		</div>
+		<div class="row J_mainContent" id="content-main" style="background-color: rgb(255, 255, 255);">
+			<iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="{$defaultUrl}" frameborder="0" data-id="{$defaultUrl}" seamless=""></iframe>
+		</div>
+	</div>
+
+	<!--刷新选中栏目的表格-->
+	<input type="hidden" id="layer-reload">
+	<!--内容区-->
+</block>
+
+<block name="jquery">
+	<script src="__PATH__/js/jquery-2.1.1.js"></script>
+</block>
+
+<block name="foot">
+	//导航栏设置
+	<script>
+		var localStorageSupport = (('localStorage' in window) && window['localStorage'] !== null);
+
+		if(localStorageSupport){
+			var body = $('body');
+
+			// Enable/disable collapse menu
+			var collapse = localStorage.getItem("collapse_menu");
+
+			$('#tab-set').click(function (){
+				if (collapse == 'on'){
+					collapse = 'off';
+					localStorage.setItem("collapse_menu", collapse);
+
+				} else{
+					collapse = 'on';
+					localStorage.setItem("collapse_menu", collapse);
+				}
+			});
+		}
+	</script>
+
+	<script src="__PATH__/js/bootstrap.min.js"></script>
+
+	<script src="__PATH__/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+	<script src="__PATH__/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="__PATH__/js/plugins/layer/layer.min.js"></script>
+
+	<!--定制的js-->
+	<script src="__PATH__/js/inspinia.js"></script>
+	<script src="__PATH__/js/plugins/pace/pace.min.js"></script>
+
+	<!-- jQuery UI -->
+	<script src="__PATH__/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+	<!--tab插件-->
+	<script type="text/javascript" src="__PATH__/js/contabs.min.js"></script>
+
+	<script src="__PLUGIN__/copy/clipboard.min.js"></script>
+	<script>
+		var clipboard = new Clipboard('#agent', {
+			text: function() {
+				return '{:getAgentUrl()}';
+			}
+		});
+
+		clipboard.on('success', function(e) {
+			$alert.success('复制成功!');
+		});
+
+		clipboard.on('error', function(e) {
+			$alert.error('复制失败, 请去推广返利中手动复制推广链接');
+		});
+	</script>
+
+	<script>
+		var getHeight = function(){
+			$('#content-main').height($(this).height()-51);
+		};
+		getHeight();
+		$(window).resize(getHeight)
+	</script>
+
+	<script>
+		//弹出窗口的使用
+		$('#layer-reload').change(function(){
+			var iframeId = $('.J_menuTabs').find('a.active').data('id');
+			var iframe = $('iframe[data-id="'+iframeId+'"]')[0].contentWindow.tableReload();
+		});
+	</script>
+</block>

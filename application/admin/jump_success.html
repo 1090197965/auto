@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>成功!</title>
+
+	<link href="/static/admin/index_style/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/static/admin/index_style/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+	<link href="/static/admin/index_style/css/animate.css" rel="stylesheet">
+	<link href="/static/admin/index_style/css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+
+
+<div class="middle-box text-center animated fadeInDown">
+	<h1 style="color: #6ce541">成功</h1>
+	<h3 class="font-bold"><?php echo(strip_tags($msg));?></h3>
+
+	<div class="error-desc">
+		<p class="jump">
+			页面自动 <a id="href" href="<?php echo($url);?>">跳转</a> 等待时间： <b id="wait"><?php echo($wait);?></b>
+		</p>
+	</div>
+</div>
+
+<!-- Mainly scripts -->
+<script src="/static/admin/index_style/js/jquery-2.1.1.js"></script>
+<script src="/static/admin/index_style/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	(function(){
+		var wait = document.getElementById('wait'),
+				href = document.getElementById('href').href;
+		var interval = setInterval(function(){
+			var time = --wait.innerHTML;
+			if(time <= 0) {
+				if (self != top) {
+					try {
+						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+						parent.$('#layer-reload').change();
+						parent.layer.close(index);	//关闭窗口
+
+					}catch(e){}
+					clearInterval(interval);
+
+				}else{
+					location.href = href;
+					clearInterval(interval);
+				}
+			};
+		}, 1000);
+	})();
+</script>
+</body>
+
+</html>
