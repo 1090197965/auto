@@ -1,0 +1,15 @@
+<a href="javascript:;" title="退出登录" rel="nofollow" id="log-out-button" onclick="logout()">退出</a>
+<script>
+	function logout(){
+		$alert.is('推出操作', '是否推出当前登录的帐号', function(){
+			$.post(
+					'{:url("index/user/logoutHandle")}',
+					function (data) {
+						$alert.auto(data, function(){
+							location.href = '{:url("/")}';
+						});
+					},'json'
+			);
+		});
+	}
+</script>
