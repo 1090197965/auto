@@ -1,76 +1,118 @@
-<switch name="$type">
-	<case value=":$Item::ID">
-		<input type="hidden" name="{$value->name}" value="{$atValue}">
-	</case>
-	<case value=":$Item::STRING">
-		<div class="layui-form-item">
-			<label class="layui-form-label">
-				{$value->title}
-				<notempty name="$value:remark">
-					<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
-				</notempty>
-			</label>
-			<div class="layui-input-block">
-				<input type="text" name="{$value->name}" lay-verify="{$verify}" autocomplete="off" placeholder="{$value->remark}" class="layui-input" value="{$atValue}">
-			</div>
+<php>$isSetHtml = $value->checkHtml();</php>
+<php>$remark = $value->remark;</php>
+<if condition="$isSetHtml">
+	<div class="layui-form-item">
+		<label class="layui-form-label">
+			{$value->title}
+			<notempty name="$remark">
+				<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
+			</notempty>
+		</label>
+		<div class="layui-input-block">
+			{:widget(reset($value->html), ['value'=>$atValue?:'', 'args'=>next($value->html)])}
 		</div>
-	</case>
-
-	<case value=":$Item::SW">
-		<div class="layui-form-item">
-			<label class="layui-form-label">
-				{$value->title}
-				<notempty name="$value:remark">
-					<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
-				</notempty>
-			</label>
-			<div class="layui-input-inline">
-				<include file='auto@format/select' item="value" value="atValue" verify="{$verify}"/>
+	</div>
+<else/>
+	<switch name="$type">
+		<case value=":$Item::ID">
+			<input type="hidden" name="{$value->name}" value="{$atValue}">
+		</case>
+		<case value=":$Item::STRING">
+			<div class="layui-form-item">
+				<label class="layui-form-label">
+					{$value->title}
+					<notempty name="$remark">
+						<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
+					</notempty>
+				</label>
+				<div class="layui-input-block">
+					<input type="text" name="{$value->name}" lay-verify="{$verify}" autocomplete="off" placeholder="{$value->remark}" class="layui-input" value="{$atValue}">
+				</div>
 			</div>
-		</div>
-	</case>
+		</case>
 
-	<case value=":$Item::INT">
-		<div class="layui-form-item">
-			<label class="layui-form-label">
-				{$value->title}
-				<notempty name="$value:remark">
-					<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
-				</notempty>
-			</label>
-			<div class="layui-input-block">
-				<input type="text" name="{$value->name}" lay-verify="{$verify}" autocomplete="off" placeholder="{$value->remark}" class="layui-input" value="{$atValue}">
+		<case value=":$Item::SW">
+			<div class="layui-form-item">
+				<label class="layui-form-label">
+					{$value->title}
+					<notempty name="$remark">
+						<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
+					</notempty>
+				</label>
+				<div class="layui-input-inline">
+					<if condition="'[type]' == 'batch'">
+						<include file='auto@format/select' item="value" value="atValue" verify="{$verify}"/>
+					<else />
+						<include file='auto@format/sw' item="value" value="atValue" verify="{$verify}"/>
+					</if>
+				</div>
 			</div>
-		</div>
-	</case>
+		</case>
 
-	<case value=":$Item::SELECT">
-		<div class="layui-form-item">
-			<label class="layui-form-label">
-				{$value->title}
-				<notempty name="$value:remark">
-					<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
-				</notempty>
-			</label>
-			<div class="layui-input-inline">
-				<include file='auto@format/select' item="value" value="atValue"  verify="{$verify}"/>
+		<case value=":$Item::INT">
+			<div class="layui-form-item">
+				<label class="layui-form-label">
+					{$value->title}
+					<notempty name="$remark">
+						<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
+					</notempty>
+				</label>
+				<div class="layui-input-block">
+					<input type="text" name="{$value->name}" lay-verify="{$verify}" autocomplete="off" placeholder="{$value->remark}" class="layui-input" value="{$atValue}">
+				</div>
 			</div>
-		</div>
-	</case>
+		</case>
 
-	<case value=":$Item::TIME">
-		<div class="layui-form-item">
-			<label class="layui-form-label">
-				{$value->title}
-				<notempty name="$value:remark">
-					<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
-				</notempty>
-			</label>
-			<div class="layui-input-inline">
-				<include file='auto@format/time' item="value" value="atValue" verify="{$verify}"/>
+		<case value=":$Item::CONTENT">
+			<div class="layui-form-item">
+				<label class="layui-form-label">
+					{$value->title}
+					<notempty name="$remark">
+						<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
+					</notempty>
+				</label>
+				<div class="layui-input-block">
+					<php>$atName = $value->name;</php>
+					<include file='common@public/input/editor' name="{$atName}" value="{$atValue}"/>
+				</div>
 			</div>
-		</div>
-	</case>
+		</case>
 
-	<default />
-</switch>
+		<case value=":$Item::SELECT">
+			<div class="layui-form-item">
+				<label class="layui-form-label">
+					{$value->title}
+					<notempty name="$remark">
+						<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
+					</notempty>
+				</label>
+				<div class="layui-input-inline">
+					<php>$option = $value->option;</php>
+					<if condition="count($option) < 4">
+						<foreach name="option" item="optionValue" key="key">
+							<input type="radio" name="{$value->name}" title="{$optionValue}" {$key==$atValue?'checked':''} value="{$key}">
+						</foreach>
+					<else />
+						<include file='auto@format/select' item="value" value="atValue"  verify="{$verify}"/>
+					</if>
+				</div>
+			</div>
+		</case>
+
+		<case value=":$Item::TIME">
+			<div class="layui-form-item">
+				<label class="layui-form-label">
+					{$value->title}
+					<notempty name="$remark">
+						<i class="layui-icon i-tips tips-{$value->name}" i-message="{$value->remark}" i-tips-class="tips-{$value->name}">&#xe60b;</i>
+					</notempty>
+				</label>
+				<div class="layui-input-inline">
+					<include file='auto@format/time' item="value" value="atValue" verify="{$verify}"/>
+				</div>
+			</div>
+		</case>
+
+		<default />
+	</switch>
+</if>

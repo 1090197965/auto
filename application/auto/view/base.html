@@ -62,7 +62,6 @@
 
 	<script src="__PLUGIN__/layui/layui.js"></script>
 	<include file='common@public/js/main' />
-	<script src="__JSMAIN__"></script>
 
 	<script>
 		//日期 QP:TODO 这里将设置日期初始化的方法放到base下
@@ -77,15 +76,18 @@
 				elem: '.layui-date',
 				type: 'datetime'
 			});
-		});
 
-		//提示信息
-		$('.i-tips').mouseover(function(){
-			var $this = $(this);
-			layer.tips($this.attr('i-message'), '.'+$this.attr('i-tips-class'), {
-				tips: [1, '#009688'],
-				time: 3000
+			//提示信息
+			$('.i-tips').on('mouseover', function(){
+				var $this = $(this);
+				layer.tips($this.attr('i-message'), '.'+$this.attr('i-tips-class'), {
+					tips: [1, '#009688'],
+					time: 3000
+				});
 			});
+
+			<block name="layui">
+			</block>
 		});
 	</script>
 	<block name="foot">

@@ -15,6 +15,13 @@ use app\common\controller\Base;
 use think\Db;
 use think\Validate;
 
+//QP:TODO: 设置视图功能, 用来显示关联的表
+//QP:TODO: 那这样应该有视图的字段, 应该区分开, 可以搜索, 但是不能添加和编辑
+//QP:TODO: 设置只显示没有数据库相关的单元格
+//QP:TODO: 添加页面尝试用include功能来自定义表单
+//QP:TODO: 自定义搜索
+//QP:TODO: 添加可以批量编辑的字段
+//QP:TODO: 自定义的单元格样式, 是指除了定义的类型外的自定义单元格
 abstract class AbstractAuto extends Base implements IAuto
 {
 	/**
@@ -41,82 +48,84 @@ abstract class AbstractAuto extends Base implements IAuto
 	 */
 	public function _initialize(){
 		parent::_initialize();
-		$c = &$this->_config;
+		$this->_config = new Config();
+		$this->_template = new Layui();
+		$this->_dataBase = new DataBase();
+		$this->_handle = new Handle();
 
 		//设置配置类
-		if(empty($this->_config)){
-			$c = new Config();
+		$c = &$this->_config;
 
-			//设置基础的配置， 例如ajax接口地址， 编辑页面地址等等
-			$c->setUrlIndexName(url('index'));
-			$c->setUrlEditName(url('edit'));
-			$c->setUrlEditBatchName(url('editBatch'));
+		//设置基础的配置， 例如ajax接口地址， 编辑页面地址等等
+		$c->setUrlIndexName(url('index'));
+		$c->setUrlEditName(url('edit'));
+		$c->setUrlEditBatchName(url('editBatch'));
 
-			$c->setAjaxIndexTableData(url('ajaxGetIndexTableData'));
+		$c->setAjaxIndexTableData(url('ajaxGetIndexTableData'));
 
-			$c->setHandleEditName(url('editHandle'));
-			$c->setHandleEditBatchName(url('editBatchHandle'));
-			$c->setHandleDeleteId(url('deleteIdHandle'));
+		$c->setHandleEditName(url('editHandle'));
+		$c->setHandleEditBatchName(url('editBatchHandle'));
+		$c->setHandleDeleteId(url('deleteIdHandle'));
 
-			//设置显示的按钮, 这里需要懂layui框架
-			//添加按钮
-			$c->addIndexTool(Config::TOOL_ADD, '添加', '
-				$alert.iframe("添加", "' . $c->getUrlEditName() . '")
-			', '&#xe654;');
-			//删除按钮
-			$c->addIndexTool(Config::TOOL_DELETE, '删除', '
-				openIdList(function(idList){
-					$alert.delete("确认删除编号为: "+idList+" 的数据吗? ", "'.$c->getHandleDeleteId().'?id="+idList, function(){
-						tableReload();
-					});
-				})
-			', '&#xe640;', 'layui-btn-danger');
+		//执行子类的配置
+		$this->setConfig();
 
-			//编辑
-			$c->addIndexItemTool(Config::TOOL_ITEM_EDIT, '编辑', '
-				$alert.iframe("编辑", "' . $c->getUrlEditName() . '?id="+data.id)
-			', '&#xe642;');
-			//删除
-			$c->addIndexItemTool(Config::TOOL_ITEM_DETETE, '删除', '
-				$alert.delete("确认删除编号为: "+data.id+" 的数据吗? ", "'.$c->getHandleDeleteId().'?id="+data.id, function(){
+		//检查配置是否有问题
+		$c->check();
+
+		//注入配置
+		$this->_dataBase->setConfig($c);
+
+		//注入配置
+		$this->_handle->setConfig($c);
+		$this->_handle->setDataBase($this->_dataBase);
+
+		//注入配置
+		$this->_template->setConfig($c);
+		$this->_template->setDataBase($this->_dataBase);
+
+		//设置显示的按钮, 这里需要懂layui框架
+		$this->_template->addIndexTool(ITemplate::TOOL_RELOAD, '', '
+			 location.reload();
+		', '&#x1002;');
+
+		//添加按钮
+		$this->_template->addIndexTool(
+			ITemplate::TOOL_ADD,
+			'添加',
+			$this->_template->getJSOpenIframe($c->getUrlEditName(), '添加'),
+			'&#xe654;'
+		);
+
+		//删除按钮
+		$this->_template->addIndexTool(ITemplate::TOOL_DELETE, '删除', '
+			openIdList(function(idList){
+				$alert.delete("确认删除编号为: "+idList+" 的数据吗? ", "'.$c->getHandleDeleteId().'?id="+idList, function(){
 					tableReload();
 				});
-			', '&#xe640;', 'layui-btn-danger');
+			})
+		', '&#xe640;', 'layui-btn-danger');
 
-			//执行子类的配置
-			$this->setConfig();
+		//批量编辑
+		if(!empty($c->getFieldBatch()))
+			$this->_template->addIndexTool(
+				ITemplate::TOOL_EDIT,
+				'批量编辑',
+				$this->_template->getJSOpenCheckboxIframe($c->getUrlEditBatchName(), '批量编辑'),
+				'&#xe642;'
+			);
 
-			//批量编辑
-			if(!empty($c->getFieldBatch()))
-				$c->addIndexTool(Config::TOOL_EDIT, '批量编辑', '
-				openIdList(function(idList){
-					$alert.iframe("批量编辑", "' . $c->getUrlEditBatchName() . '?id="+idList);
-				})
-			', '&#xe642;');
+		//行编辑
+		$this->_template->addIndexItemTool(ITemplate::TOOL_ITEM_EDIT, '',
+			$this->_template->getJSOpenItemIdIframe($c->getUrlEditName(), '编辑')
+			, '&#xe642;');
+		//行删除
+		$this->_template->addIndexItemTool(ITemplate::TOOL_ITEM_DETETE, '', '
+			$alert.delete("确认删除编号为: "+data.id+" 的数据吗? ", "'.$c->getHandleDeleteId().'?id="+data.id, function(){
+				tableReload();
+			});
+		', '&#xe640;', 'layui-btn-danger');
 
-			//检查配置是否有问题
-			$c->check();
-		}
-
-		//注入数据库操作类
-		if(empty($this->_dataBase)){
-			$this->_dataBase = new DataBase();
-			$this->_dataBase->setConfig($c);
-		}
-
-		//逻辑层
-		if(empty($this->_handle)){
-			$this->_handle = new Handle();
-			$this->_handle->setConfig($c);
-			$this->_handle->setDataBase($this->_dataBase);
-		}
-
-		//注入模版类
-		if(empty($this->_template)){
-			$this->_template = new Layui();
-			$this->_template->setConfig($c);
-			$this->_template->setDataBase($this->_dataBase);
-		}
 	}
 
 	/**
@@ -151,6 +160,9 @@ abstract class AbstractAuto extends Base implements IAuto
 	 * @return mixed
 	 */
 	public function edit(){
+		//检测当前页面是否可以编辑
+		$this->_config->checkNotEdit();
+
 		return $this->_template->vEdit();
 	}
 
@@ -158,6 +170,9 @@ abstract class AbstractAuto extends Base implements IAuto
 	 * 批量处理页面
 	 */
 	public function editBatch(){
+		//检查是否可以使用批量编辑
+		$this->_config->checkFieldBatch();
+
 		return $this->_template->vEditBatch();
 	}
 
@@ -166,6 +181,9 @@ abstract class AbstractAuto extends Base implements IAuto
 	 * 接受类型: post
 	 */
 	public function editHandle(){
+		//检测当前页面是否可以编辑
+		$this->_config->checkNotEdit();
+
 		$data = input('post.');
 		if($this->_handle->validate($data)){
 			$data = $this->_handle->getForm($data);
@@ -180,6 +198,9 @@ abstract class AbstractAuto extends Base implements IAuto
 	 * 批量处理操作
 	 */
 	public function editBatchHandle(){
+		//检查是否可以使用批量编辑
+		$this->_config->checkFieldBatch();
+
 		$idName = $this->_config->getField()->getIdName();
 		$data = input('post.');
 		//取出需要修改的主键
@@ -230,6 +251,9 @@ abstract class AbstractAuto extends Base implements IAuto
 	 * 返回的参数 : 标准ajax返回
 	 */
 	public function deleteIdHandle(){
+		//检查是否可以删除
+		$this->_config->checkNotDelete();
+
 		$id = input('get.id');
 		$this->message($this->_handle->deleteId($id), '删除成功!', $this->_handle->getError());
 	}

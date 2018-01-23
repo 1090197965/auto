@@ -73,8 +73,10 @@ class Layui extends Base implements ITemplate{
 
 	public function vIndex(){
 		$this->view->col = json_encode($this->getTableColInfo());
-		$this->view->tool = $this->_config->getIndexTool();
-		$this->view->itemTool = $this->_config->getIndexItemTool();
+		$this->view->tool = $this->getIndexTool();
+		$this->view->itemTool = $this->getIndexItemTool();
+		$this->view->widget = $this->getWidget();
+		$this->view->stat = $this->getStat();
 
 		return $this->fetch('auto@index/index', [], $this->replace_str, $this->templateConfig);
 	}
@@ -157,10 +159,13 @@ class Layui extends Base implements ITemplate{
 			}
 		}
 
-		$info[] = [
-			'toolbar'	=> '#barDemo',
-			'title'		=> '工具'
-		];
+		//工具栏
+		if(!empty($this->getIndexItemTool())){
+			$info[] = [
+				'toolbar'	=> '#barDemo',
+				'title'		=> '工具'
+			];
+		}
 
 		return $info;
 	}
@@ -168,4 +173,104 @@ class Layui extends Base implements ITemplate{
 	public function createHTML() {
 		// TODO: Implement createHTML() method.
 	}
+
+	//生成js代码--------------------------------------------
+	public function getJSOpenIframe($url, $title, $size = ''){
+		return '
+			$alert.iframe("'.$title.'", "' . $url . '", '.$this->createSizeJs($size).')
+		';
+	}
+	public function getJSOpenCheckboxIframe($url, $title, $size = ''){
+		return '
+			openIdList(function(idList){
+				$alert.iframe("'.$title.'", "' . $url . '?id="+idList, '.$this->createSizeJs($size).');
+			})
+		';
+	}
+	public function getJSOpenItemIdIframe($url, $title, $size = '') {
+		return '
+			$alert.iframe("'.$title.'", "' . $url . '?id="+data.id, '.$this->createSizeJs($size).')
+		';
+	}
+	public function getJSOpenItemGetIframe($url, $get, $title, $size = '') {
+		return '
+			$alert.iframe("'.$title.'", "' . $url . '?'.$get.', '.$this->createSizeJs($size).')
+		';
+	}
+	private function createSizeJs($size){
+		if(empty($size))
+			return 'undefined';
+
+		if(count($size) != 2)
+			exception('大小的格式只能是两个长度的数组, 例如[100px, 200px] 或者 [100%, 50%]');
+
+		$c = reset($size);
+		$k = next($size);
+
+		return "['$c', '$k']";
+	}
+
+	//生成js代码--------------------------------------------
+
+	//显示的按钮---------------------------------------------
+	protected $indexTool = [];
+	protected $hiddenTool = [];
+	protected $indexItemTool = [];
+	protected $hiddenItemTool = [];
+
+	public function addIndexTool($name, $title, $onClick, $ico = '', $class = '') {
+		if(!in_array($name, $this->hiddenTool)){
+			$this->indexTool[$name] = [
+				'name'	=> $name,
+				'title'	=> $title,
+				'click'	=> $onClick,
+				'class'	=> $class,
+				'ico'	=> $ico
+			];
+		}
+	}
+	public function getIndexTool() {
+		return $this->indexTool;
+	}
+	public function removeIndexTool($name) {
+		$this->hiddenTool[$name] = $name;
+	}
+	public function removeIndexItemTool($name) {
+		$this->hiddenItemTool[$name] = $name;
+	}
+	public function addIndexItemTool($name, $title, $onClick, $ico = '', $class = '') {
+		if(!in_array($name, $this->hiddenItemTool)){
+			$this->indexItemTool[$name] = [
+				'name'	=> $name,
+				'title'	=> $title,
+				'click'	=> $onClick,
+				'class'	=> $class,
+				'ico'	=> $ico
+			];
+		}
+	}
+	public function getIndexItemTool() {
+		return $this->indexItemTool;
+	}
+	//显示的按钮---------------------------------------------
+
+	//自定义html模块-----------------------------------------
+	private $_widget = [];
+	public function addWidget($title, $widget, $widgetArgs = null) {
+		$this->_widget[$title] = ['widget'=>$widget, 'args'=>$widgetArgs];
+	}
+
+	public function getWidget() {
+		return $this->_widget;
+	}
+
+	private $_stat = [];
+	public function addStat($title, array $statArr) {
+		$this->_stat[$title] = $statArr;
+	}
+
+	public function getStat() {
+		return $this->_stat;
+	}
+	//自定义html模块-----------------------------------------
 }

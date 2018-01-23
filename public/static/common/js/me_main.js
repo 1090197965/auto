@@ -12,14 +12,20 @@
 
 	//弹窗
 	var $alert = {
-		_type : function(value, title, type, call){
+		_type : function(value, title, type, call, errorCall){
 			if(typeof value == 'object'){
 				type = value.type;
 				value = value.message;
+				if(type == 'success')
+					call = call;
+				else if(type == 'error')
+					call = errorCall;
+				else{
+					call = undefined;
+				}
 
 			}else{
 				type = getType(type, 'info');
-				call = getType(call, function(){});
 			}
 
 			var config = {
@@ -57,8 +63,8 @@
 					config['type'] = type;
 
 					//因为时间类型不能有回调, 所以这里单独调用
-					swal(config);
-					return true;
+					//swal(config);
+					//return true;
 					break;
 
 				default :
@@ -67,13 +73,19 @@
 					break;
 			}
 
-			swal(config, call);
+			if(typeof call == 'undefined'){
+				swal(config);
+
+			}else{
+				swal(config, call);
+
+			}
 		},
 		info	: function(value, title, call){
 			this._type(value, title, 'info', call);
 		},
-		auto	: function(value, call){
-			this._type(value, undefined, undefined, call);
+		auto	: function(value, sucessCall, errorCall){
+			this._type(value, undefined, undefined, sucessCall, errorCall);
 		},
 		error	: function(value, title){
 			this._type(value, title, 'error');
@@ -129,28 +141,61 @@
 				return inputValue;
 			});
 		},
+		is		: function(title, message, call, url){
+			swal({
+					title: title,
+					text: message,
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "确定",
+					cancelButtonText: "取消",
+					showLoaderOnConfirm	: true,
+					closeOnConfirm: false,
+					closeOnCancel: true
+				},
+				function(isConfirm){
+					if (isConfirm) {
+						call();
+					}
+				});
+		},
 		delete	: function(message, url, call){
 			message = getType(message, '删除后将无法恢复!');
+			var deleteHandle = function(){
+				$.get(url, function(data){
+					$alert.auto(data, call);
+				}, 'json');
+			};
+			$alert.is('确定要删除吗?', message, deleteHandle, url);
+			//swal({
+			//	title: "确定删除吗？",
+			//	text: message,
+			//	type: "warning",
+			//	showCancelButton: true,
+			//	confirmButtonColor: "#DD6B55",
+			//	confirmButtonText: "确定",
+			//	cancelButtonText: "取消",
+			//	showLoaderOnConfirm	: true,
+			//	closeOnConfirm: false,
+			//	closeOnCancel: false
+			//},
+			//function(isConfirm){
+			//	if (isConfirm) {
+			//		$.get(url, function(data){
+			//			$alert.auto(data, call);
+			//		}, 'json');
+			//	}else{
+			//		$alert.error("操作已取消!", "取消！");
+			//	}
+			//});
+		},
+		html 	: function(html, title){
 			swal({
-				title: "确定删除吗？",
-				text: message,
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "确定",
-				cancelButtonText: "取消",
-				showLoaderOnConfirm	: true,
-				closeOnConfirm: false,
-				closeOnCancel: false
-			},
-			function(isConfirm){
-				if (isConfirm) {
-					$.get(url, function(data){
-						$alert.auto(data, call);
-					}, 'json');
-				}else{
-					$alert.error("操作已取消!", "取消！");
-				}
+				title: title,
+				text:  html,
+				html: true,
+				allowOutsideClick		: true,
 			});
 		},
 		message	: function(type, message){
@@ -180,9 +225,18 @@
 				class_name: 'gritter-success'//gritter-center
 			});
 		},
-		iframe: function(title, url, size){
+		iframe: function(title, url, size, $isNotParent){
+			//判断是否是iframe窗口
+			//如果是iframe中, 就在父类窗口打开iframe, 这样就可以避免iframe窗口越来越小
+			//如果有异常弹不出layer, 则把下面的trycatch注释掉, 这样应该就能调用了
+
+			//在顶级窗口摊开 如果有table无法刷新的bug, 就使用下面的tab栏目
+			var layer = parent.layer;
+			//在tab栏目中弹开
+			//var	layer = layui.layer;
+
 			size = getType(size, ['993px', '500px']);
-			layui.layer.open({
+			layer.open({
 				type: 2,
 				title: title,
 				shadeClose: true,
@@ -191,6 +245,27 @@
 				area: size,
 				content: url
 			});
+		},
+		close: function(data){
+			data = getType(data, {result:true});
+
+			//是否为顶级窗口
+			//if(parent.name == ''){
+
+			//}else{
+				//注意：parent 是 JS 自带的全局对象，可用于操作父页面
+				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+
+				if(data.result){
+					parent.$alert.message(true, '操作成功');
+					//刷新列表页面
+					parent.$('#layer-reload').change();
+					parent.layer.close(index);	//关闭窗口
+
+				}else{
+					parent.layer.msg(data.message, {shade: 0.3,shadeClose :true}); //提示信息
+				}
+			//}
 		}
 	};
 

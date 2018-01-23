@@ -60,7 +60,7 @@ class Base extends Controller{
 			if($result){
 				$this->success($success);
 			}else{
-				$this->error($success);
+				$this->error($error);
 			}
 		}
 	}

@@ -54,54 +54,34 @@ class DataBase implements IDataBase{
 		$c = $this->_config;
 		$data = $this->db
 			//设置显示的字段
-			->field($c->getFieldIndexShow())
+//			->field($c->getFieldIndexShow())
+			//原本是只是显示只显示的字段, 但是修改成所有字段都提出来, 有时候有些字段需要用show事件处理, 但是却不需要显示, 所以这样修改了
+			->field($c->getField()->getListName())
 			//默认筛选
 			->where($c->getWhere())
 			//搜索栏筛选
 			->where(function($q)use($get){
 				foreach ($get as $key => $value){
+					//QP:TODO: 这里, 如果恰好数据库有page或者limit这两个字段会导致数据出错, 需要注意
 					//设置中含有的字段信息
 					$fieldList = $this->_config->getField()->getListName();
 					if($value !== '' and in_array($key, $fieldList)){
 						//获得常量值
-						switch($this->_config->getField()->getList($key)->type){
-							//这四种类型直接获取搜索
-							case Item::ID:
-							case Item::INT:
-							case Item::SELECT:
-							case Item::SW:
-								$q->where($key, $value);
-								break;
-
-							//字符串类型都采用模糊搜索的方式
-							case Item::STRING:
-							case Item::DESCRIPTION:
-							case Item::CONTENT:
-								$q->where($key, 'like', "%$value%");
-								break;
-
-							//时间都是范围选择
-							case Item::TIME:
-								list($start, $end) = explode('~', $value);
-								$start = strtotime($start);
-								$end = strtotime($end);
-								$q->where($key, 'between', [$start, $end]);
-								break;
-
-							//用来防止没有筛选的时候where为空的报错
-							default:
-								$q->where(null);
-								break;
-						}
+						Field::switchSearch($q, $this->_config->getField()->getList($key), $value);
 					}
 				}
+
+				if($this->_config->issetOn(IConfig::EVENT_SEARCH)){
+					$this->_config->onSearch($get, $q);
+				}
 			})
+			->order($this->_config->getOrder())
 			->paginate($limit);
 
 		//显示事件处理
 		if($data instanceof Paginator){
 			$data->each(function($item){
-				if($this->_config->issetOn(Config::EVENT_SHOW)){
+				if($this->_config->issetOn(IConfig::EVENT_SHOW)){
 					$newItem = $this->_config->onShow($item);
 					if(!empty($newItem))
 						return $newItem;
@@ -136,5 +116,30 @@ class DataBase implements IDataBase{
 	public function update($id, $data){
 		$this->error = '保存失败';
 		return $this->db->where($this->_config->getField()->getIdName(), 'in', $id)->update($data);
+	}
+
+	public function isOnly($name, $value, $id = null){
+		$data = $this->db->where($name, $value)->count();
+		
+		//如果没查询到数据直接true
+		if($data == 0)
+			return true;
+
+		else{
+			//如果没设置id, 则只要有数据都是直接false
+			if(empty($id)){
+				return false;
+
+			}else{
+				//如果大于一条, 则直接false
+				if($data > 1){
+					return false;
+
+				}else{
+					$dbId = $this->db->where($name, $value)->value('id');
+					return $id == $dbId ? true : false;
+				}
+			}
+		}
 	}
 }

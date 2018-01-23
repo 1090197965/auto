@@ -7,6 +7,20 @@
 			line-height: 34px;
 			margin-bottom: 0.5rem;
 		}
+
+
+		.list-content {
+			margin-left: 1%;
+		}
+
+		input {
+			padding-right: 0!important;
+		}
+
+		#search-wrap{
+			position: relative;
+			z-index: 999;
+		}
 	</style>
 </block>
 
@@ -23,7 +37,7 @@
 		</legend>
 	</fieldset>
 
-	<div class="layui-col-md12 layui-anim layui-anim-up hide" id="search-wrap">
+	<div class="layui-col-md12 layui-anim layui-anim-up hide list-content" id="search-wrap">
 		<div class="ibox-content">
 			<div class="layui-form-item">
 				<form method="get" class="layui-form" id="search">
@@ -58,7 +72,7 @@
 		<legend>数据列表</legend>
 	</fieldset>
 
-	<div class="layui-col-md12">
+	<div class="layui-col-md12 list-content">
 		<div class="ibox float-e-margins">
 			<div class="ibox-content">
 				<div class="layui-btn-group demoTable">
@@ -86,6 +100,35 @@
 			</div>
 		</div>
 	</div>
+
+	<foreach name="widget" item="value" key="key">
+		<div class="layui-clear"></div>
+		<fieldset class="layui-elem-field layui-field-title">
+			<legend>{$key}</legend>
+		</fieldset>
+		{:widget($value.widget, $value.args)}
+	</foreach>
+	
+	
+	<foreach name="stat" item="value" key="key">
+		<div class="layui-clear"></div>
+		<fieldset class="layui-elem-field layui-field-title">
+			<legend>{$key}</legend>
+		</fieldset>
+
+		<div class="layui-row list-content">
+			<foreach name="value" item="sValue" key="sKey">
+				<div class="layui-inline layui-col-xs12 layui-col-md6">
+					<label class="layui-form-label">
+						{$sKey} :
+					</label>
+					<label class="layui-form-label">
+						{$sValue}
+					</label>
+				</div>
+			</foreach>
+		</div>
+	</foreach>
 </block>
 
 <block name="foot">
@@ -107,11 +150,11 @@
 				done: function(res, curr, count){		//渲染结束后的操作
 					//如果是异步请求数据方式，res即为你接口返回的信息。
 					//如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-					console.log(res);
+//					console.log(res);
 					//得到当前页码
-					console.log(curr);
+//					console.log(curr);
 					//得到数据总量
-					console.log(count);
+//					console.log(count);
 				},
 				loading:true
 			});

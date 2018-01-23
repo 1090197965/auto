@@ -20,6 +20,20 @@ interface IConfig {
 	public function setTableName($tableName);
 
 	/**
+	 * 设置不能使用编辑功能
+	 * @return mixed
+	 */
+	public function setNotEdit();
+	public function checkNotEdit();
+
+	/**
+	 * 设置不能删除功能
+	 * @return mixed
+	 */
+	public function setNotDelete();
+	public function checkNotDelete();
+
+	/**
 	 * 如果是多表关联, 则可以设置
 	 * @param $join
 	 *
@@ -95,6 +109,12 @@ interface IConfig {
 	 */
 	public function setFieldBatch(array $fieldBatch);
 
+	/**
+	 * 检查是否可以使用批量编辑
+	 * @return mixed
+	 */
+	public function checkFieldBatch();
+
 	//以下是页面跳转url的设置接口------------------
 	/**
 	 * @param mixed 设置首页链接
@@ -165,6 +185,16 @@ interface IConfig {
 	//-----------------------------------------
 
 	//事件--------------------------------------
+	//QP:TODO: 添加事件 这里也需要添加, 需要EVENT开头
+	const EVENT_EDIT = 'Edit';
+	const EVENT_CHECK_SAVE = 'CheckSave';
+	const EVENT_SEARCH = 'Search';
+	const EVENT_END = 'End';
+	const EVENT_SHOW = 'Show';
+	const EVENT_GET_FORM_LAST = 'GetFormLast';
+	const EVENT_BEFORE = 'Before';
+	const EVENT_AFTER = 'After';
+
 	/**
 	 * 绑定事件
 	 *
@@ -201,7 +231,7 @@ interface IConfig {
 	public function onSearch();
 
 	/**
-	 * 保存后的操作
+	 * 保存操作结束后的操作
 	 * @return mixed
 	 */
 	public function onEnd();
@@ -211,65 +241,25 @@ interface IConfig {
 	 * @return mixed
 	 */
 	public function onShow();
+
+	/**
+	 * 保存之前的操作
+	 * @return mixed
+	 */
+	public function onBefore();
+
+	/**
+	 * 保存之后的操作
+	 * @return mixed
+	 */
+	public function onAfter();
+
+	/**
+	 * 这里是提取表单后, 获取表单数据的事件
+	 * @return mixed
+	 */
+	public function onGetFormLast();
 	//事件--------------------------------------
-
-	//显示的按钮---------------------------------
-
-	/**
-	 * 设置工具按钮
-	 * @param $name string 工具的标识 使用常量, TOOL开头的
-	 * @param $title string 显示名称
-	 * @param $onClick string 点击js事件
-	 * @param $ico string 图标, 可以在这里找到http://www.layui.com/doc/element/icon.html
-	 * @param $class string 自定义class
-	 *
-	 * @return mixed
-	 */
-	public function addIndexTool($name, $title, $onClick, $ico, $class);
-
-	/**
-	 * 获得工具按钮
-	 * @return mixed
-	 */
-	public function getIndexTool();
-
-	/**
-	 * 删除显示的工具按钮
-	 * @param $name string 使用常量, TOOL开头的
-	 *
-	 * @return mixed
-	 */
-	public function removeIndexTool($name);
-
-	/**
-	 * 设置列表工具
-	 *
-	 * @param $name string 使用常量, TOOL_ITEM 开头的
-	 * @param $title
-	 * @param $onClick
-	 * @param $ico
-	 * @param $class
-	 *
-	 * @return mixed
-	 * @internal param array $tool
-	 *
-	 */
-	public function addIndexItemTool($name, $title, $onClick, $ico, $class);
-
-	/**
-	 * 获得列表工具
-	 * @return mixed
-	 */
-	public function getIndexItemTool();
-
-	/**
-	 * 删除显示的工具按钮
-	 * @param $name string 使用常量, TOOL_ITEM 开头的
-	 *
-	 * @return mixed
-	 */
-	public function removeIndexItemTool($name);
-	//显示的按钮---------------------------------
 
 	//检查配置是否有问题
 	public function check();

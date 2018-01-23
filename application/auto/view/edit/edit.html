@@ -1,5 +1,9 @@
 <extend name="auto@base"/>
 
+<block name="head">
+	<include file='auto@switch/edit/css' />
+</block>
+
 <block name="body">
 	<div class="wrapper-content gray-bg">
 		<div class="row wrapper white-bg">
@@ -29,6 +33,7 @@
 </block>
 
 <block name="foot">
+	<include file='auto@switch/edit/js' />
 	<script>
 		layui.use(['form', 'layedit', 'laydate'], function(){
 			var form = layui.form
@@ -58,18 +63,7 @@
 						//判断是否是iframe窗口
 						//如果不是, 这里会有一个异常, 所以使用try来判断
 						try{
-							//注意：parent 是 JS 自带的全局对象，可用于操作父页面
-							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-
-							if(data.result){
-								parent.$alert.message(true, '操作成功');
-								//刷新列表页面
-								parent.$('#layer-reload').change();
-								parent.layer.close(index);	//关闭窗口
-
-							}else{
-								parent.layer.msg(data.message, {shade: 0.3,shadeClose :true}); //提示信息
-							}
+							$alert.close(data);
 
 						}catch(error){
 							$alert.auto(data);
